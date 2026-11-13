@@ -32,3 +32,10 @@ test('Theme-Umschalter ist vorhanden', () => {
   assert.ok(html.includes('id="theme-toggle"'));
   assert.ok(html.includes('data-theme'));
 });
+
+test('Feld-Tabs: Leiste, Hinzufügen, Umbenennen und Löschen sind vorhanden und vor den Eingaben', () => {
+  const tabs = html.indexOf('id="tablist"');
+  assert.ok(tabs > 0 && tabs < html.indexOf('id="prev"'));
+  for (const id of ['tab-add', 'tab-rename', 'tab-delete']) assert.ok(html.includes(`id="${id}"`), id);
+  assert.ok(html.includes('role="tablist"'));
+});

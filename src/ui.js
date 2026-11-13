@@ -1,7 +1,7 @@
 // Oberfläche (Browser). Nutzt window.DATA, window.Calendar, window.Plan.
 (function () {
-  var data = window.DATA, Cal = window.Calendar, Plan = window.Plan;
-  var KEY = 'fruchtfolge.v1', THEME_KEY = 'fruchtfolge.theme';
+  var data = window.DATA, Cal = window.Calendar, Plan = window.Plan, Tabs = window.Tabs;
+  var KEY = 'fruchtfolge.v2', LEGACY_KEY = 'fruchtfolge.v1', THEME_KEY = 'fruchtfolge.theme';
   var $ = function (id) { return document.getElementById(id); };
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var cropByName = function (n) { return data.crops.filter(function (c) { return c.name === n; })[0]; };
@@ -36,13 +36,35 @@
   fill($('catch'), [{ value: '', label: 'keine' }].concat(data.catchCrops.map(function (c) { return { value: c.name, label: c.label }; })));
   fill($('soil'), [{ value: '', label: 'unbekannt' }].concat(data.pf.soilTypes.map(function (s) { return { value: String(s.index), label: s.name }; })));
 
-  // ---- Zustand
-  var state = { prev: '', last: '', month: 'MID_AUTUMN', catch: '', soil: '', ph: '', nitrogen: '' };
-  try { Object.assign(state, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
-  ['prev', 'last', 'month', 'catch', 'soil', 'ph', 'nitrogen'].forEach(function (k) { $(k).value = state[k]; if ($(k).value !== state[k]) { $(k).selectedIndex = 0; state[k] = $(k).value; } });
-  if (state.soil || state.ph || state.nitrogen) document.querySelector('.more').open = true;
+  // ---- Zustand (Feld-Tabs)
+  var KEYS = ['prev', 'last', 'month', 'catch', 'soil', 'ph', 'nitrogen'];
+  function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  var store = Tabs.load(read(KEY), read(LEGACY_KEY));
+  var state = null; // das aktive Feld
+  function save() { try { localStorage.setItem(KEY, Tabs.serialize(store)); } catch (e) {} }
+  function activeField() { return store.fields.filter(function (f) { return f.id === store.active; })[0]; }
 
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function renderTabs() {
+    $('tablist').innerHTML = store.fields.map(function (f) {
+      var sel = f.id === store.active;
+      return '<button type="button" role="tab" class="tab" data-id="' + esc(f.id) + '" aria-selected="' + sel + '" tabindex="' + (sel ? 0 : -1) + '" title="' + esc(f.name) + '">' + esc(f.name) + '</button>';
+    }).join('');
+  }
+
+  // Aktives Feld in die Eingabefelder laden und neu zeichnen.
+  function showField() {
+    state = activeField();
+    KEYS.forEach(function (k) {
+      $(k).value = state[k];
+      if ($(k).value !== state[k]) $(k).selectedIndex = 0; // ungültiger gespeicherter Wert
+    });
+    if (!$('month').value) $('month').selectedIndex = 0;
+    $('month').value = Cal.MONTH_ORDER.indexOf(state.month) >= 0 ? state.month : 'MID_AUTUMN';
+    document.querySelector('.more').open = Boolean(state.soil || state.ph || state.nitrogen);
+    renderTabs();
+    render();
+  }
+  function commit(next) { store = next; save(); showField(); }
   function num(v) { var n = parseFloat(v); return isFinite(n) ? n : null; }
   var pct = function (f) { return Math.round(f * 100) + ' %'; };
 
@@ -84,17 +106,43 @@
   }
 
   // ---- Ereignisse
-  ['prev', 'last', 'month', 'catch', 'soil', 'ph', 'nitrogen'].forEach(function (k) {
+  KEYS.forEach(function (k) {
     $(k).addEventListener(k === 'ph' || k === 'nitrogen' ? 'input' : 'change', function () {
-      state[k] = $(k).value;
+      var patch = {};
+      patch[k] = $(k).value;
       // Nach Wahl der letzten Frucht: Monat auf deren frühesten Erntemonat setzen (danach frei änderbar).
       if (k === 'last') {
-        var c = cropByName(state.last), p = c && Cal.firstHarvestPeriod(c);
-        if (p) { state.month = p; $('month').value = p; }
+        var c = cropByName($(k).value), p = c && Cal.firstHarvestPeriod(c);
+        if (p) { patch.month = p; $('month').value = p; }
       }
+      store = Tabs.updateField(store, store.active, patch);
+      state = activeField();
       save();
       render();
     });
   });
-  render();
+
+  // ---- Feld-Tabs bedienen
+  function selectTab(id) { commit(Tabs.setActive(store, id)); var b = document.querySelector('.tab[data-id="' + id + '"]'); if (b) b.focus(); }
+  $('tablist').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('.tab') : null;
+    if (b) selectTab(b.getAttribute('data-id'));
+  });
+  $('tablist').addEventListener('keydown', function (e) {
+    var dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!dir) return;
+    var i = store.fields.findIndex(function (f) { return f.id === store.active; });
+    selectTab(store.fields[(i + dir + store.fields.length) % store.fields.length].id);
+    e.preventDefault();
+  });
+  $('tab-add').addEventListener('click', function () { commit(Tabs.addField(store)); });
+  $('tab-rename').addEventListener('click', function () {
+    var n = window.prompt('Name des Felds:', state.name);
+    if (n !== null) commit(Tabs.renameField(store, store.active, n));
+  });
+  $('tab-delete').addEventListener('click', function () {
+    if (window.confirm('Feld „' + state.name + '“ wirklich löschen?')) commit(Tabs.removeField(store, store.active));
+  });
+
+  showField();
 })();

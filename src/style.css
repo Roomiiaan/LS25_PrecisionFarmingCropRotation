@@ -11,6 +11,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:15p
 .btn{min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:600;cursor:pointer}
 .btn:hover{border-color:var(--pri)}
 :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.tabbar{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.tablist{display:flex;gap:6px;flex-wrap:wrap}
+.tab{min-height:44px;padding:0 18px;border:1px solid var(--line);border-bottom:3px solid transparent;border-radius:10px 10px 0 0;background:var(--noBg);color:var(--mut);font:inherit;font-weight:600;cursor:pointer;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--card);color:var(--ink);border-bottom-color:var(--pri)}
+.tabactions{display:flex;gap:8px;flex-wrap:wrap}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
 .inputs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 .inputs.precise{grid-template-columns:repeat(3,1fr);margin-top:12px}
