@@ -60,3 +60,11 @@ test('Jede planbare Frucht hat Saat- und Erntefenster', () => {
     assert.ok(c.harvestPeriods.length > 0, `${c.name}: Erntefenster fehlt`);
   }
 });
+
+test('Extraktor scheitert laut, wenn die Mods fehlen (keine stille Teilausgabe)', () => {
+  const { spawnSync } = require('node:child_process');
+  const r = spawnSync('node', [path.join(__dirname, '..', 'scripts', 'extract.js')], {
+    env: { ...process.env, LS25_MODS: path.join(__dirname, 'gibt-es-nicht') }, encoding: 'utf8',
+  });
+  assert.notEqual(r.status, 0);
+});

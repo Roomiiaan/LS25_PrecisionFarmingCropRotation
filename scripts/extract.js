@@ -34,6 +34,12 @@ const attrs = (s) => {
 };
 const tags = (xml, name) =>
   [...xml.matchAll(new RegExp(`<${name}\\b([^>]*?)/?>`, 'g'))].map((m) => attrs(m[1]));
+// Bricht laut ab, wenn eine Auswertung zu wenige Treffer liefert (z. B. nach einem Mod-Update mit anderem Format).
+const must = (value, what, min = 1) => {
+  const n = Array.isArray(value) ? value.length : Object.keys(value).length;
+  if (n < min) throw new Error(`Extraktion fehlgeschlagen: ${what} - nur ${n} Treffer (erwartet mindestens ${min}). Hat sich das Mod-Format geändert?`);
+  return value;
+};
 const list = (s) => (s || '').split(/\s+/).filter(Boolean);
 const nums = (s) => list(s).map(Number);
 const version = (xml) => (xml.match(/<version>([^<]+)<\/version>/) || [])[1];
@@ -89,9 +95,10 @@ function main() {
 
   // --- Gülzow: Foliage pro Frucht + deutsche Namen
   const l10n = {};
-  for (const [, k, v] of text(gz, 'translations/l10n_de.xml').matchAll(/<text\s+name="fillType_(\w+)"\s+text="([^"]*)"/g)) {
-    l10n[k.toUpperCase()] = v;
+  for (const a of tags(text(gz, 'translations/l10n_de.xml'), 'text')) {
+    if (a.name && a.name.startsWith('fillType_')) l10n[a.name.slice('fillType_'.length).toUpperCase()] = a.text;
   }
+  must(l10n, 'Gülzow: deutsche Fruchtnamen (fillType_*)', 5);
   const label = (n) => l10n[n] || FALLBACK_DE[n] || n;
   const fol = {};
   for (const f of tags(text(gz, 'maps/config/fruitTypes.xml'), 'fruitType')) {
@@ -102,7 +109,8 @@ function main() {
     if (info.name) fol[info.name] = info;
   }
 
-  const crops = tags(mainXml, 'crop').map((c) => {
+  must(fol, 'Gülzow: Foliage-Dateien der Früchte', 20);
+  const crops = must(tags(mainXml, 'crop'), 'Crop Rotation: crops.xml <crop>', 20).map((c) => {
     const f = fol[c.fruitName];
     return {
       name: c.fruitName,
@@ -118,7 +126,7 @@ function main() {
       litersPerSqm: f ? f.litersPerSqm : 0,
     };
   });
-  const catchCrops = tags(catchXml, 'catchCrop').map((c) => ({
+  const catchCrops = must(tags(catchXml, 'catchCrop'), 'Crop Rotation: <catchCrop>').map((c) => ({
     name: c.fruitName,
     label: label(c.fruitName),
     veryGoodCrops: list(c.veryGoodCrops),
@@ -130,38 +138,43 @@ function main() {
   const pf = text(pz, 'PrecisionFarming.xml');
   const block = (xml, tag) => xml.slice(xml.indexOf(`<${tag}`), xml.indexOf(`</${tag}>`));
   const pfL10n = {};
-  for (const [, k, v] of text(pz, 'l10n/l10n_de.xml').matchAll(/<e\s+k="(\w+)"\s+v="([^"]*)"/g)) pfL10n[k] = v;
-  const soilTypes = tags(block(pf, 'soilTypes'), 'soilType').map((s, i) => ({
+  for (const a of tags(text(pz, 'l10n/l10n_de.xml'), 'e')) if (a.k) pfL10n[a.k] = a.v;
+  const soilTypes = must(tags(block(pf, 'soilTypes'), 'soilType'), 'Precision Farming: Bodenarten', 4).map((s, i) => ({
     index: i + 1, name: pfL10n[s.name.replace('$l10n_', '')] || s.name, yieldPotential: Number(s.yieldPotential),
   }));
   const nBlock = block(pf, 'nitrogenMap');
   const nYield = block(nBlock, 'yieldMappings');
-  const nitrogenYieldMappings = tags(nYield, 'yieldMapping').map((m) => ({
+  const nitrogenYieldMappings = must(tags(nYield, 'yieldMapping'), 'Precision Farming: Stickstoff-yieldMapping', 10).map((m) => ({
     difference: Number(m.difference), yieldFactor: Number(m.yieldFactor),
   }));
   const nitrogenRegularLevel = Number(attrs(nBlock.match(/<yieldMappings\b([^>]*)>/)[1]).regularLevel);
   const nitrogenRequirements = {};
   const nitrogenIgnoreOverfertilization = [];
-  for (const m of nBlock.matchAll(/<fruitRequirement\s+fruitTypeName="(\w+)"([^>]*)>([\s\S]*?)<\/fruitRequirement>/g)) {
-    const key = m[1].toUpperCase();
-    if (attrs(m[2]).ignoreOverfertilization === 'true') nitrogenIgnoreOverfertilization.push(key);
-    nitrogenRequirements[key] = tags(m[3], 'soil').map((s) => ({
+  for (const m of nBlock.matchAll(/<fruitRequirement\b([^>]*)>([\s\S]*?)<\/fruitRequirement>/g)) {
+    const fa = attrs(m[1]);
+    if (!fa.fruitTypeName) continue;
+    const key = fa.fruitTypeName.toUpperCase();
+    if (fa.ignoreOverfertilization === 'true') nitrogenIgnoreOverfertilization.push(key);
+    nitrogenRequirements[key] = tags(m[2], 'soil').map((s) => ({
       soil: Number(s.soilTypeIndex),
       targetLevel: Number(s.targetLevel),
       reduction: Number(s.reduction),
       yieldPotential: Number(s.yieldPotential),
     }));
   }
+  must(nitrogenRequirements, 'Precision Farming: Stickstoff-fruitRequirement', 10);
   const pHBlock = block(pf, 'pHMap');
   const phValuePerState = Number(attrs(pHBlock.match(/<pHValues\b([^>]*)>/)[1]).pHValuePerState);
   const vt = pf.slice(pf.indexOf('<valueTransformations'), pf.indexOf('</valueTransformations>'));
   const phOptimal = {};
-  for (const m of vt.matchAll(/<valueTransformation\s+soilTypeIndex="(\d+)">([\s\S]*?)<\/valueTransformation>/g)) {
-    phOptimal[m[1]] = Number(attrs(m[2].match(/<optimalValue\b([^>]*?)\/>/)[1]).value);
+  for (const m of vt.matchAll(/<valueTransformation\b([^>]*)>([\s\S]*?)<\/valueTransformation>/g)) {
+    const opt = m[2].match(/<optimalValue\b([^>]*?)\/>/);
+    if (opt && attrs(m[1]).soilTypeIndex) phOptimal[attrs(m[1]).soilTypeIndex] = Number(attrs(opt[1]).value);
   }
+  must(phOptimal, 'Precision Farming: pH-Optimum je Bodenart', 4);
   const afterVt = pf.slice(pf.indexOf('</valueTransformations>'));
   const phYield = afterVt.slice(afterVt.indexOf('<yieldMappings>'), afterVt.indexOf('</yieldMappings>'));
-  const phMappings = tags(phYield, 'yieldMapping').map((m) => ({
+  const phMappings = must(tags(phYield, 'yieldMapping'), 'Precision Farming: pH-yieldMapping', 10).map((m) => ({
     levelDifference: Number(m.levelDifference), yieldFactor: Number(m.yieldFactor),
   }));
 

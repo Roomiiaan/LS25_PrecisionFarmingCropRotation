@@ -39,3 +39,15 @@ test('Feld-Tabs: Leiste, Hinzufügen, Umbenennen und Löschen sind vorhanden und
   for (const id of ['tab-add', 'tab-rename', 'tab-delete']) assert.ok(html.includes(`id="${id}"`), id);
   assert.ok(html.includes('role="tablist"'));
 });
+
+test('Suche in den Frucht-Auswahllisten ist eingebaut', () => {
+  assert.ok(html.includes('Tippen zum Suchen'));
+  assert.ok(html.includes('filterItems'));
+  assert.ok(html.includes('.combo-panel'));
+});
+
+test('Hinweis erklärt den Unterschied zwischen "Keine Angabe" und Brache', () => {
+  assert.ok(html.includes('Keine Angabe'));
+  assert.ok(html.includes('Brache'));
+  assert.ok(/zählt ein leerer Verlauf als Brache/.test(html));
+});

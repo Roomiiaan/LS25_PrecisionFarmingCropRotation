@@ -36,6 +36,10 @@
   fill($('catch'), [{ value: '', label: 'keine' }].concat(data.catchCrops.map(function (c) { return { value: c.name, label: c.label }; })));
   fill($('soil'), [{ value: '', label: 'unbekannt' }].concat(data.pf.soilTypes.map(function (s) { return { value: String(s.index), label: s.name }; })));
 
+  // Alle Auswahllisten bekommen eine Suche (direkt lostippen) und ein einheitliches Aussehen.
+  var combos = ['prev', 'last', 'month', 'catch', 'soil'].map(function (k) { return window.Combo.enhance($(k)); });
+  function refreshCombos() { combos.forEach(function (c) { c.refresh(); }); }
+
   // ---- Zustand (Feld-Tabs)
   var KEYS = ['prev', 'last', 'month', 'catch', 'soil', 'ph', 'nitrogen'];
   function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -60,6 +64,7 @@
     });
     if (!$('month').value) $('month').selectedIndex = 0;
     $('month').value = Cal.MONTH_ORDER.indexOf(state.month) >= 0 ? state.month : 'MID_AUTUMN';
+    refreshCombos();
     document.querySelector('.more').open = Boolean(state.soil || state.ph || state.nitrogen);
     renderTabs();
     render();
@@ -113,7 +118,7 @@
       // Nach Wahl der letzten Frucht: Monat auf deren frühesten Erntemonat setzen (danach frei änderbar).
       if (k === 'last') {
         var c = cropByName($(k).value), p = c && Cal.firstHarvestPeriod(c);
-        if (p) { patch.month = p; $('month').value = p; }
+        if (p) { patch.month = p; $('month').value = p; refreshCombos(); }
       }
       store = Tabs.updateField(store, store.active, patch);
       state = activeField();

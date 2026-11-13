@@ -22,6 +22,21 @@ body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:15p
 .inputs.precise{grid-template-columns:repeat(3,1fr);margin-top:12px}
 label{display:block;font-size:13px;font-weight:600;color:var(--mut);margin-bottom:5px}
 select,input{width:100%;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;padding:0 12px}
+.combo{position:relative}
+.combo-btn{width:100%;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;text-align:left}
+.combo-btn:hover,.combo-btn[aria-expanded="true"]{border-color:var(--pri)}
+.combo-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.combo-chev{color:var(--mut)}
+.combo-panel{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:20;background:var(--card);border:1px solid var(--pri);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.25);padding:8px}
+.combo-panel[hidden]{display:none}
+.combo-search{margin-bottom:6px}
+.combo-list{list-style:none;padding:0;margin:0;max-height:280px;overflow-y:auto}
+.combo-opt,.combo-empty{padding:10px 12px;border-radius:8px;min-height:40px;display:flex;align-items:center}
+.combo-opt{cursor:pointer}
+.combo-opt.active{background:var(--priS);color:var(--ink)}
+.combo-opt[aria-selected="true"]{font-weight:700}
+.combo-opt[aria-selected="true"]::after{content:"✓";margin-left:auto;color:var(--pri)}
+.combo-empty{color:var(--mut)}
 .more{margin-top:14px}
 .more summary{cursor:pointer;color:var(--pri);font-weight:600;min-height:32px}
 .hint{font-size:13px;color:var(--mut);margin-top:10px}

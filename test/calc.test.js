@@ -91,3 +91,7 @@ test('totalFactor meldet, ob für die Frucht Stickstoffwerte vorliegen', () => {
   assert.equal(calc.totalFactor(data, { ...base, cropName: 'WINTERWHEAT' }).nitrogenKnown, true);
   assert.equal(calc.totalFactor(data, { ...base, cropName: 'RYE' }).nitrogenKnown, false);
 });
+
+test('Brache nur im letzten Slot: +5 % Brache, vorletzte Frucht Winterweizen schlecht (-20 %), keine Monokultur = 0,85', () => {
+  near(calc.rotationFactor(data, { cropName: 'WINTERWHEAT', last: 'FALLOW', prev: 'WINTERWHEAT', catchCrop: null }), 0.85);
+});
