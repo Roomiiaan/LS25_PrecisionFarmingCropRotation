@@ -56,3 +56,7 @@ test('Ertragsbalken haben Farbstufen (grün/gelb/orange/rot) in beiden Themes', 
   for (const l of ['good', 'ok', 'warn', 'bad']) assert.ok(html.includes(`.lvl-${l}`), l);
   assert.ok(html.includes('--lv-bad'));
 });
+
+test('Fußzeile enthält "Made with ♥ and Claude Code"', () => {
+  assert.ok(/Made with\s*<span[^>]*>♥<\/span>\s*and Claude Code/.test(html));
+});
