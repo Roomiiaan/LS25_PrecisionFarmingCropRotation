@@ -51,3 +51,8 @@ test('Hinweis erklärt den Unterschied zwischen "Keine Angabe" und Brache', () =
   assert.ok(html.includes('Brache'));
   assert.ok(/zählt ein leerer Verlauf als Brache/.test(html));
 });
+
+test('Ertragsbalken haben Farbstufen (grün/gelb/orange/rot) in beiden Themes', () => {
+  for (const l of ['good', 'ok', 'warn', 'bad']) assert.ok(html.includes(`.lvl-${l}`), l);
+  assert.ok(html.includes('--lv-bad'));
+});

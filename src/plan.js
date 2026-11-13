@@ -25,7 +25,17 @@
     return rows;
   }
 
-  const api = { buildPlan };
+  // Farbstufe für den Ertragsbalken, nach dem angezeigten (gerundeten) Prozentwert:
+  // good ab 100 %, ok ab 90 %, warn ab 75 %, sonst bad.
+  function yieldLevel(total) {
+    const pct = Math.round(total * 100);
+    if (pct >= 100) return 'good';
+    if (pct >= 90) return 'ok';
+    if (pct >= 75) return 'warn';
+    return 'bad';
+  }
+
+  const api = { buildPlan, yieldLevel };
   if (isNode) module.exports = api;
   else root.Plan = api;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -60,3 +60,16 @@ test('buildPlan: Monokultur (gleiche Frucht zweimal) ergibt Malus ohne Absturz',
   const ww = rows.find((r) => r.crop.name === 'WINTERWHEAT');
   assert.ok(Number.isFinite(ww.factors.total) && ww.factors.total < 1);
 });
+
+test('yieldLevel: Stufen nach angezeigtem Prozentwert (grün ab 100, gelb ab 90, orange ab 75, sonst rot)', () => {
+  const { yieldLevel } = require('../src/plan.js');
+  assert.equal(yieldLevel(1.6), 'good');
+  assert.equal(yieldLevel(1.0), 'good');
+  assert.equal(yieldLevel(0.996), 'good'); // wird als 100 % angezeigt
+  assert.equal(yieldLevel(0.99), 'ok');
+  assert.equal(yieldLevel(0.9), 'ok');
+  assert.equal(yieldLevel(0.89), 'warn');
+  assert.equal(yieldLevel(0.75), 'warn');
+  assert.equal(yieldLevel(0.74), 'bad');
+  assert.equal(yieldLevel(0), 'bad');
+});

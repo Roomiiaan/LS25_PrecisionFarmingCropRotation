@@ -102,7 +102,7 @@
       var liters = f.litersPerHa ? '≈ ' + (Math.round(f.litersPerHa / 10) * 10).toLocaleString('de-DE') + ' l/ha · ' : '';
       var status = r.plantable ? '✓ Jetzt säbar' : '– Nicht säbar im ' + Cal.periodLabel(state.month);
       var width = Math.max(2, Math.min(100, (f.total / 1.6) * 100));
-      return '<article class="row grid ' + (r.plantable ? 'ok' : 'no') + '">' +
+      return '<article class="row grid ' + (r.plantable ? 'ok' : 'no') + ' lvl-' + Plan.yieldLevel(f.total) + '">' +
         '<div><div class="nm">' + esc(c.label) + '</div><div class="st">' + status + ' · Saat ' + esc(r.plantingLabel) + '</div></div>' +
         '<div><div class="pct">' + pct(f.total) + '</div><div class="bar" aria-hidden="true"><i style="width:' + width.toFixed(1) + '%"></i></div>' +
         '<div class="sub">' + liters + esc(parts.join(' · ')) + '</div></div>' +
