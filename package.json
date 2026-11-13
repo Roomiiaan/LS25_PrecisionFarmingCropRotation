@@ -1,0 +1,22 @@
+{
+  "name": "ls25-fruchtfolge-planer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "node --test",
+    "extract": "node scripts/extract.js",
+    "build": "node scripts/build.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "private": "true",
+  "dependencies": {
+    "adm-zip": "^0.6.1"
+  }
+}

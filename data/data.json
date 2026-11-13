@@ -1,0 +1,2862 @@
+{
+ "meta": {
+  "versions": {
+   "cropRotation": "1.0.1.0",
+   "guelzow": "1.1.0.1",
+   "precisionFarming": "1.5.1.0"
+  }
+ },
+ "settings": {
+  "monoculturePenalty": -0.05,
+  "breakPeriodsPenalty": -0.1,
+  "foreCropsPenalties": [
+   -0.25,
+   -0.2
+  ],
+  "foreCropsVeryGoodBonuses": [
+   0.15,
+   0.1
+  ],
+  "foreCropsGoodBonuses": [
+   0.1,
+   0.05
+  ],
+  "fallowStateBonus": 0.05,
+  "veryGoodCatchCropBonus": 0.15,
+  "goodCatchCropBonus": 0.1,
+  "badCatchCropPenalty": -0.1
+ },
+ "crops": [
+  {
+   "name": "MEADOW",
+   "label": "Wiese",
+   "onMap": true,
+   "ignoreInPlanner": true,
+   "breakPeriods": 0,
+   "veryGoodCrops": [],
+   "goodCrops": [],
+   "badCrops": [],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_WINTER"
+   ],
+   "harvestPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN",
+    "LATE_WINTER"
+   ],
+   "litersPerSqm": 1.95
+  },
+  {
+   "name": "GRASS",
+   "label": "Gras",
+   "onMap": true,
+   "ignoreInPlanner": true,
+   "breakPeriods": 0,
+   "veryGoodCrops": [],
+   "goodCrops": [],
+   "badCrops": [],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_WINTER"
+   ],
+   "harvestPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN",
+    "LATE_WINTER"
+   ],
+   "litersPerSqm": 2.25
+  },
+  {
+   "name": "FIELDGRASS",
+   "label": "Ackergras",
+   "onMap": true,
+   "ignoreInPlanner": true,
+   "breakPeriods": 0,
+   "veryGoodCrops": [],
+   "goodCrops": [],
+   "badCrops": [],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_WINTER"
+   ],
+   "harvestPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN",
+    "LATE_WINTER"
+   ],
+   "litersPerSqm": 2.55
+  },
+  {
+   "name": "WHEAT",
+   "label": "Sommerweizen",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "POTATO",
+    "SUGARBEET",
+    "CLOVER",
+    "ALFALFA",
+    "BEETROOT",
+    "CANOLA"
+   ],
+   "goodCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "RYE",
+    "SUNFLOWER",
+    "OAT",
+    "SILAGEMAIZE",
+    "MAIZE",
+    "SPELT",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS",
+    "TRITICALE"
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "LATE_WINTER"
+   ],
+   "harvestPeriods": [
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN"
+   ],
+   "litersPerSqm": 0.45
+  },
+  {
+   "name": "WINTERWHEAT",
+   "label": "Winterweizen",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "CANOLA",
+    "CLOVER",
+    "ALFALFA",
+    "BEETROOT",
+    "OAT",
+    "SUNFLOWER",
+    "SILAGEMAIZE",
+    "POTATO"
+   ],
+   "goodCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "MAIZE",
+    "SUGARBEET",
+    "RYE",
+    "SPELT",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS",
+    "TRITICALE"
+   ],
+   "plantingPeriods": [
+    "EARLY_AUTUMN",
+    "MID_AUTUMN"
+   ],
+   "harvestPeriods": [
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER"
+   ],
+   "litersPerSqm": 0.525
+  },
+  {
+   "name": "SUMMERWHEAT",
+   "label": "Sommerweizen",
+   "onMap": false,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "MAIZE",
+    "SOYBEAN",
+    "POTATO",
+    "SUGARBEET",
+    "CLOVER",
+    "ALFALFA",
+    "BEETROOT",
+    "SUNFLOWER",
+    "LINSEED",
+    "HEMP",
+    "POPPY",
+    "BEANS",
+    "PEAS",
+    "LENTILS"
+   ],
+   "goodCrops": [
+    "SILAGEMAIZE",
+    "GREENBEAN",
+    "PEA",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS"
+   ],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "BARLEY",
+   "label": "Gerste",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "POTATO",
+    "SUGARBEET",
+    "CLOVER",
+    "ALFALFA",
+    "BEETROOT",
+    "CANOLA"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "RYE",
+    "SUNFLOWER",
+    "OAT",
+    "SILAGEMAIZE",
+    "MAIZE",
+    "TRITICALE",
+    "SPELT",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS"
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "LATE_WINTER"
+   ],
+   "harvestPeriods": [
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER"
+   ],
+   "litersPerSqm": 0.45
+  },
+  {
+   "name": "SUMMERBARLEY",
+   "label": "Sommergerste",
+   "onMap": false,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "POTATO",
+    "SUGARBEET",
+    "CLOVER",
+    "ALFALFA",
+    "BEETROOT",
+    "CANOLA"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "RYE",
+    "SUNFLOWER",
+    "OAT",
+    "SILAGEMAIZE",
+    "MAIZE",
+    "TRITICALE",
+    "SPELT",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS"
+   ],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "WINTERBARLEY",
+   "label": "Wintergerste",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "VETCHRYE",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "CANOLA",
+    "CLOVER",
+    "ALFALFA",
+    "OAT",
+    "LINSEED",
+    "HEMP",
+    "POPPY",
+    "TOBACCO",
+    "LAVENDER"
+   ],
+   "goodCrops": [
+    "SOYBEAN",
+    "POTATO",
+    "SILAGEMAIZE",
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "MAIZE",
+    "SUGARBEET",
+    "BEETROOT",
+    "BUCKWHEAT",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS"
+   ],
+   "plantingPeriods": [
+    "EARLY_AUTUMN",
+    "MID_AUTUMN"
+   ],
+   "harvestPeriods": [
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER"
+   ],
+   "litersPerSqm": 0.5
+  },
+  {
+   "name": "OAT",
+   "label": "Hafer",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE",
+    "CLOVER",
+    "ALFALFA",
+    "BUCKWHEAT"
+   ],
+   "goodCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "SOYBEAN",
+    "PEA",
+    "POTATO",
+    "CANOLA",
+    "SUGARBEET",
+    "SUNFLOWER",
+    "SPELT"
+   ],
+   "badCrops": [
+    "OAT"
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING"
+   ],
+   "harvestPeriods": [
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER"
+   ],
+   "litersPerSqm": 0.425
+  },
+  {
+   "name": "RYE",
+   "label": "Roggen",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "CANOLA",
+    "CLOVER",
+    "ALFALFA",
+    "BEETROOT",
+    "OAT",
+    "SUNFLOWER",
+    "SILAGEMAIZE",
+    "POTATO"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "MAIZE",
+    "SUGARBEET",
+    "TRITICALE",
+    "SPELT",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "RYE",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS"
+   ],
+   "plantingPeriods": [
+    "EARLY_AUTUMN",
+    "MID_AUTUMN"
+   ],
+   "harvestPeriods": [
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER"
+   ],
+   "litersPerSqm": 0.45
+  },
+  {
+   "name": "TRITICALE",
+   "label": "Triticale",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "CANOLA",
+    "CLOVER",
+    "ALFALFA",
+    "BEETROOT",
+    "OAT",
+    "SUNFLOWER",
+    "SILAGEMAIZE",
+    "POTATO"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "MAIZE",
+    "SUGARBEET",
+    "RYE",
+    "SPELT",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS",
+    "TRITICALE"
+   ],
+   "plantingPeriods": [
+    "EARLY_AUTUMN",
+    "MID_AUTUMN"
+   ],
+   "harvestPeriods": [
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER"
+   ],
+   "litersPerSqm": 0.5
+  },
+  {
+   "name": "BUCKWHEAT",
+   "label": "Buchweizen",
+   "onMap": false,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "CLOVER",
+    "ALFALFA",
+    "POTATO",
+    "SUGARBEET",
+    "BEETROOT",
+    "SUNFLOWER"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE",
+    "OAT",
+    "MAIZE",
+    "SILAGEMAIZE",
+    "CANOLA",
+    "LINSEED",
+    "HEMP",
+    "POPPY",
+    "TOBACCO",
+    "LAVENDER"
+   ],
+   "badCrops": [
+    "BUCKWHEAT",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS"
+   ],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "SPELT",
+   "label": "Dinkel",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [
+    "CLOVER",
+    "ALFALFA",
+    "BEETROOT",
+    "POTATO",
+    "SUGARBEET",
+    "OAT",
+    "SUNFLOWER"
+   ],
+   "goodCrops": [
+    "SOYBEAN",
+    "PEA",
+    "CANOLA",
+    "MAIZE"
+   ],
+   "badCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE",
+    "SPELT",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS",
+    "BUCKWHEAT"
+   ],
+   "plantingPeriods": [
+    "MID_AUTUMN",
+    "LATE_AUTUMN"
+   ],
+   "harvestPeriods": [
+    "EARLY_SUMMER",
+    "LATE_SUMMER"
+   ],
+   "litersPerSqm": 0.4
+  },
+  {
+   "name": "GREENRYE",
+   "label": "Grünroggen",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "CANOLA",
+    "CLOVER",
+    "ALFALFA",
+    "BEETROOT",
+    "OAT",
+    "SUNFLOWER",
+    "SILAGEMAIZE",
+    "POTATO"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE",
+    "SPELT",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SUGARBEET",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS"
+   ],
+   "plantingPeriods": [
+    "EARLY_AUTUMN",
+    "MID_AUTUMN"
+   ],
+   "harvestPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING"
+   ],
+   "litersPerSqm": 0.5332
+  },
+  {
+   "name": "SORGHUM",
+   "label": "Sorghum",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE",
+    "CLOVER",
+    "ALFALFA",
+    "BEETROOT",
+    "SPELT"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "POTATO",
+    "SUGARBEET",
+    "GREENRYE",
+    "VETCHRYE",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS",
+    "SUNFLOWER",
+    "OAT",
+    "CANOLA",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "SORGHUM"
+   ],
+   "plantingPeriods": [
+    "MID_SPRING",
+    "LATE_SPRING"
+   ],
+   "harvestPeriods": [
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN"
+   ],
+   "litersPerSqm": 0.45
+  },
+  {
+   "name": "VETCHRYE",
+   "label": "Wickroggen",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "CANOLA",
+    "CLOVER",
+    "ALFALFA",
+    "BEETROOT",
+    "OAT",
+    "SUNFLOWER",
+    "SILAGEMAIZE",
+    "POTATO"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE",
+    "SPELT",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SUGARBEET",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS"
+   ],
+   "plantingPeriods": [
+    "EARLY_AUTUMN",
+    "MID_AUTUMN"
+   ],
+   "harvestPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING"
+   ],
+   "litersPerSqm": 0.5332
+  },
+  {
+   "name": "SOYBEAN",
+   "label": "Sojabohnen",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [],
+   "goodCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "SPELT",
+    "RYE",
+    "TRITICALE",
+    "OAT",
+    "GREENRYE",
+    "VETCHRYE",
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO",
+    "SUGARBEET",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "SOYBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "GREENBEAN",
+    "CLOVER",
+    "ALFALFA",
+    "SUNFLOWER",
+    "CANOLA"
+   ],
+   "plantingPeriods": [
+    "MID_SPRING",
+    "LATE_SPRING"
+   ],
+   "harvestPeriods": [
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN"
+   ],
+   "litersPerSqm": 0.275
+  },
+  {
+   "name": "GREENBEAN",
+   "label": "Grüne Bohnen",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [],
+   "goodCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "SPELT",
+    "RYE",
+    "TRITICALE",
+    "OAT",
+    "GREENRYE",
+    "VETCHRYE",
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO",
+    "SUGARBEET",
+    "SUNFLOWER",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "SOYBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "GREENBEAN",
+    "CLOVER",
+    "ALFALFA",
+    "CANOLA"
+   ],
+   "plantingPeriods": [
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER"
+   ],
+   "harvestPeriods": [
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN",
+    "EARLY_WINTER"
+   ],
+   "litersPerSqm": 0.6
+  },
+  {
+   "name": "PEA",
+   "label": "Erbsen",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [],
+   "goodCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "SPELT",
+    "RYE",
+    "TRITICALE",
+    "OAT",
+    "GREENRYE",
+    "VETCHRYE",
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO",
+    "SUGARBEET",
+    "SUNFLOWER",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "SOYBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "GREENBEAN",
+    "CLOVER",
+    "ALFALFA",
+    "CANOLA"
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING"
+   ],
+   "harvestPeriods": [
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN"
+   ],
+   "litersPerSqm": 0.5278
+  },
+  {
+   "name": "BEANS",
+   "label": "BEANS",
+   "onMap": false,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "MAIZE",
+    "SUGARBEET"
+   ],
+   "goodCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "SPELT",
+    "RYE",
+    "TRITICALE",
+    "OAT",
+    "BUCKWHEAT",
+    "GREENRYE",
+    "SILAGEMAIZE",
+    "POTATO"
+   ],
+   "badCrops": [
+    "SOYBEAN",
+    "PEA",
+    "PEAS",
+    "GREENBEAN",
+    "BEANS",
+    "LENTILS",
+    "CLOVER",
+    "ALFALFA",
+    "VETCHRYE",
+    "CANOLA",
+    "SUNFLOWER",
+    "LINSEED",
+    "HEMP",
+    "POPPY"
+   ],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "PEAS",
+   "label": "PEAS",
+   "onMap": false,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "SPELT",
+    "RYE",
+    "TRITICALE",
+    "BUCKWHEAT",
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO"
+   ],
+   "goodCrops": [
+    "CANOLA",
+    "SUNFLOWER",
+    "SUGARBEET"
+   ],
+   "badCrops": [
+    "SOYBEAN",
+    "PEA",
+    "PEAS",
+    "GREENBEAN",
+    "BEANS",
+    "LENTILS",
+    "CLOVER",
+    "ALFALFA",
+    "VETCHRYE",
+    "OAT",
+    "GREENRYE",
+    "LINSEED",
+    "HEMP",
+    "POPPY"
+   ],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "LENTILS",
+   "label": "LENTILS",
+   "onMap": false,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "MAIZE",
+    "SUGARBEET"
+   ],
+   "goodCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "SPELT",
+    "RYE",
+    "TRITICALE",
+    "OAT",
+    "BUCKWHEAT",
+    "GREENRYE",
+    "SILAGEMAIZE",
+    "POTATO"
+   ],
+   "badCrops": [
+    "SOYBEAN",
+    "PEA",
+    "PEAS",
+    "GREENBEAN",
+    "BEANS",
+    "LENTILS",
+    "CLOVER",
+    "ALFALFA",
+    "VETCHRYE",
+    "CANOLA",
+    "SUNFLOWER",
+    "LINSEED",
+    "HEMP",
+    "POPPY"
+   ],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "ALFALFA",
+   "label": "Luzerne",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 0,
+   "veryGoodCrops": [],
+   "goodCrops": [],
+   "badCrops": [
+    "SOYBEAN",
+    "CLOVER",
+    "ALFALFA",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "GREENRYE",
+    "VETCHRYE"
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_WINTER"
+   ],
+   "harvestPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN",
+    "LATE_WINTER"
+   ],
+   "litersPerSqm": 2.48
+  },
+  {
+   "name": "CLOVER",
+   "label": "Klee",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 0,
+   "veryGoodCrops": [],
+   "goodCrops": [],
+   "badCrops": [
+    "SOYBEAN",
+    "CLOVER",
+    "ALFALFA",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "GREENRYE",
+    "VETCHRYE"
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_WINTER"
+   ],
+   "harvestPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN",
+    "LATE_WINTER"
+   ],
+   "litersPerSqm": 2.37
+  },
+  {
+   "name": "MAIZE",
+   "label": "Mais",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "CLOVER"
+   ],
+   "goodCrops": [
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE",
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "POTATO",
+    "SUGARBEET",
+    "GREENRYE",
+    "VETCHRYE",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS",
+    "SUNFLOWER",
+    "SILAGEMAIZE",
+    "MAIZE",
+    "OAT",
+    "CANOLA",
+    "ALFALFA",
+    "BEETROOT",
+    "SPELT",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "SORGHUM"
+   ],
+   "plantingPeriods": [
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER"
+   ],
+   "harvestPeriods": [
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN",
+    "EARLY_WINTER"
+   ],
+   "litersPerSqm": 0.75
+  },
+  {
+   "name": "SILAGEMAIZE",
+   "label": "Silage Mais",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 1,
+   "veryGoodCrops": [
+    "CLOVER"
+   ],
+   "goodCrops": [
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE",
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "POTATO",
+    "SUGARBEET",
+    "GREENRYE",
+    "VETCHRYE",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS",
+    "SUNFLOWER",
+    "SILAGEMAIZE",
+    "MAIZE",
+    "OAT",
+    "CANOLA",
+    "ALFALFA",
+    "BEETROOT",
+    "SPELT",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "SORGHUM"
+   ],
+   "plantingPeriods": [
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER"
+   ],
+   "harvestPeriods": [
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN",
+    "EARLY_WINTER"
+   ],
+   "litersPerSqm": 0.92
+  },
+  {
+   "name": "CANOLA",
+   "label": "Raps",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 4,
+   "veryGoodCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "SPELT",
+    "RYE",
+    "TRITICALE",
+    "BUCKWHEAT"
+   ],
+   "goodCrops": [
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS",
+    "OAT"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO",
+    "CANOLA",
+    "SUGARBEET",
+    "SOYBEAN",
+    "SUNFLOWER",
+    "CLOVER",
+    "ALFALFA"
+   ],
+   "plantingPeriods": [
+    "LATE_SUMMER",
+    "EARLY_AUTUMN"
+   ],
+   "harvestPeriods": [
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER"
+   ],
+   "litersPerSqm": 0.25
+  },
+  {
+   "name": "SUNFLOWER",
+   "label": "Sonnenblumen",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 4,
+   "veryGoodCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "SPELT",
+    "RYE",
+    "TRITICALE",
+    "BUCKWHEAT"
+   ],
+   "goodCrops": [
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS",
+    "OAT",
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO",
+    "SUGARBEET"
+   ],
+   "badCrops": [
+    "SUNFLOWER",
+    "CANOLA",
+    "CLOVER",
+    "ALFALFA"
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING"
+   ],
+   "harvestPeriods": [
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN"
+   ],
+   "litersPerSqm": 0.25
+  },
+  {
+   "name": "LINSEED",
+   "label": "LINSEED",
+   "onMap": false,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "PEA",
+    "PEAS"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "SPELT",
+    "RYE",
+    "TRITICALE",
+    "OAT",
+    "BUCKWHEAT",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO",
+    "CANOLA",
+    "SUNFLOWER",
+    "SOYBEAN",
+    "LINSEED",
+    "HEMP",
+    "POPPY",
+    "TOBACCO",
+    "LAVENDER",
+    "BEANS",
+    "LENTILS"
+   ],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "HEMP",
+   "label": "HEMP",
+   "onMap": false,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "PEA",
+    "PEAS"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "SPELT",
+    "RYE",
+    "TRITICALE",
+    "OAT",
+    "BUCKWHEAT",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO",
+    "CANOLA",
+    "SUNFLOWER",
+    "SOYBEAN",
+    "LINSEED",
+    "HEMP",
+    "POPPY",
+    "TOBACCO",
+    "LAVENDER",
+    "BEANS",
+    "LENTILS"
+   ],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "POPPY",
+   "label": "POPPY",
+   "onMap": false,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "PEA",
+    "PEAS"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "SPELT",
+    "RYE",
+    "TRITICALE",
+    "OAT",
+    "BUCKWHEAT",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO",
+    "CANOLA",
+    "SUNFLOWER",
+    "SOYBEAN",
+    "LINSEED",
+    "HEMP",
+    "POPPY",
+    "TOBACCO",
+    "LAVENDER",
+    "BEANS",
+    "LENTILS"
+   ],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "TOBACCO",
+   "label": "TOBACCO",
+   "onMap": false,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE",
+    "OAT",
+    "BUCKWHEAT"
+   ],
+   "goodCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO",
+    "SUGARBEET"
+   ],
+   "badCrops": [
+    "TOBACCO",
+    "CANOLA",
+    "SUNFLOWER",
+    "LINSEED",
+    "HEMP",
+    "POPPY",
+    "LAVENDER",
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS"
+   ],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "LAVENDER",
+   "label": "LAVENDER",
+   "onMap": false,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [
+    "WHEAT",
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE",
+    "OAT",
+    "BUCKWHEAT"
+   ],
+   "goodCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO",
+    "SUGARBEET"
+   ],
+   "badCrops": [
+    "LAVENDER",
+    "TOBACCO",
+    "CANOLA",
+    "SUNFLOWER",
+    "LINSEED",
+    "HEMP",
+    "POPPY",
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS"
+   ],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "POTATO",
+   "label": "Kartoffeln",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 3,
+   "veryGoodCrops": [
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SOYBEAN",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "OAT",
+    "CLOVER",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO",
+    "SUGARBEET",
+    "CANOLA",
+    "SUNFLOWER"
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING"
+   ],
+   "harvestPeriods": [
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN"
+   ],
+   "litersPerSqm": 3.75
+  },
+  {
+   "name": "SUGARBEET",
+   "label": "Zuckerrüben",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 3,
+   "veryGoodCrops": [
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SPELT",
+    "OAT",
+    "VETCHRYE",
+    "GREENRYE",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "MEADOW",
+    "GRASS",
+    "FIELDGRASS",
+    "POTATO",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "SOYBEAN",
+    "CANOLA",
+    "SUGARBEET"
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING"
+   ],
+   "harvestPeriods": [
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN"
+   ],
+   "litersPerSqm": 5.78
+  },
+  {
+   "name": "ONION",
+   "label": "Zwiebeln",
+   "onMap": false,
+   "ignoreInPlanner": false,
+   "breakPeriods": 3,
+   "veryGoodCrops": [
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SPELT",
+    "OAT",
+    "VETCHRYE",
+    "GREENRYE",
+    "SOYBEAN",
+    "CLOVER",
+    "ALFALFA",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "POTATO",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "ONION",
+    "CARROT",
+    "PARSNIP",
+    "SUGARBEET",
+    "BEETROOT",
+    "SPINACH",
+    "SUNFLOWER",
+    "CANOLA"
+   ],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "BEETROOT",
+   "label": "Rote Bete",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 3,
+   "veryGoodCrops": [
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SPELT",
+    "OAT",
+    "VETCHRYE",
+    "GREENRYE",
+    "SOYBEAN",
+    "CLOVER",
+    "ALFALFA",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO",
+    "SUGARBEET",
+    "SPINACH"
+   ],
+   "plantingPeriods": [
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER"
+   ],
+   "harvestPeriods": [
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN",
+    "EARLY_WINTER"
+   ],
+   "litersPerSqm": 3.25
+  },
+  {
+   "name": "CARROT",
+   "label": "Karotten",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SPELT",
+    "OAT",
+    "VETCHRYE",
+    "GREENRYE",
+    "SOYBEAN",
+    "CLOVER",
+    "ALFALFA",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "POTATO",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "SUGARBEET",
+    "CARROT",
+    "PARSNIP"
+   ],
+   "plantingPeriods": [
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER"
+   ],
+   "harvestPeriods": [
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN",
+    "EARLY_WINTER"
+   ],
+   "litersPerSqm": 4.348
+  },
+  {
+   "name": "PARSNIP",
+   "label": "Pastinaken",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 2,
+   "veryGoodCrops": [
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SPELT",
+    "OAT",
+    "VETCHRYE",
+    "GREENRYE",
+    "SOYBEAN",
+    "CLOVER",
+    "ALFALFA",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "POTATO",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "SUGARBEET",
+    "CARROT",
+    "PARSNIP"
+   ],
+   "plantingPeriods": [
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER"
+   ],
+   "harvestPeriods": [
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN",
+    "EARLY_WINTER"
+   ],
+   "litersPerSqm": 3.25
+  },
+  {
+   "name": "SPINACH",
+   "label": "Spinat",
+   "onMap": true,
+   "ignoreInPlanner": false,
+   "breakPeriods": 0,
+   "veryGoodCrops": [
+    "WINTERWHEAT",
+    "SUMMERWHEAT",
+    "WINTERBARLEY",
+    "RYE",
+    "TRITICALE"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SPELT",
+    "OAT",
+    "VETCHRYE",
+    "GREENRYE",
+    "SOYBEAN",
+    "CLOVER",
+    "ALFALFA",
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "SPINACH",
+    "POTATO",
+    "SUGARBEET"
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING"
+   ],
+   "harvestPeriods": [
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN"
+   ],
+   "litersPerSqm": 2.31
+  },
+  {
+   "name": "RICE",
+   "label": "Reis",
+   "onMap": true,
+   "ignoreInPlanner": true,
+   "breakPeriods": 0,
+   "veryGoodCrops": [],
+   "goodCrops": [
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "CLOVER",
+    "ALFALFA",
+    "VETCHRYE"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "SORGHUM"
+   ],
+   "plantingPeriods": [
+    "MID_SPRING",
+    "LATE_SPRING"
+   ],
+   "harvestPeriods": [
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN"
+   ],
+   "litersPerSqm": 0.66
+  },
+  {
+   "name": "RICELONGGRAIN",
+   "label": "Langkornreis",
+   "onMap": true,
+   "ignoreInPlanner": true,
+   "breakPeriods": 0,
+   "veryGoodCrops": [],
+   "goodCrops": [
+    "GREENBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "CLOVER",
+    "ALFALFA",
+    "VETCHRYE"
+   ],
+   "badCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "SORGHUM"
+   ],
+   "plantingPeriods": [
+    "MID_SPRING"
+   ],
+   "harvestPeriods": [
+    "LATE_SUMMER",
+    "EARLY_AUTUMN"
+   ],
+   "litersPerSqm": 0.9
+  },
+  {
+   "name": "SUGARCANE",
+   "label": "Zuckerrohr",
+   "onMap": true,
+   "ignoreInPlanner": true,
+   "breakPeriods": 1,
+   "veryGoodCrops": [],
+   "goodCrops": [],
+   "badCrops": [],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 11.34
+  },
+  {
+   "name": "COTTON",
+   "label": "Baumwolle",
+   "onMap": true,
+   "ignoreInPlanner": true,
+   "breakPeriods": 1,
+   "veryGoodCrops": [],
+   "goodCrops": [],
+   "badCrops": [],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "LATE_WINTER"
+   ],
+   "harvestPeriods": [
+    "EARLY_AUTUMN",
+    "MID_AUTUMN",
+    "LATE_AUTUMN"
+   ],
+   "litersPerSqm": 0.497
+  },
+  {
+   "name": "GRAPE",
+   "label": "GRAPE",
+   "onMap": false,
+   "ignoreInPlanner": true,
+   "breakPeriods": 0,
+   "veryGoodCrops": [],
+   "goodCrops": [],
+   "badCrops": [],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "OLIVE",
+   "label": "OLIVE",
+   "onMap": false,
+   "ignoreInPlanner": true,
+   "breakPeriods": 0,
+   "veryGoodCrops": [],
+   "goodCrops": [],
+   "badCrops": [],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  },
+  {
+   "name": "POPLAR",
+   "label": "POPLAR",
+   "onMap": false,
+   "ignoreInPlanner": true,
+   "breakPeriods": 0,
+   "veryGoodCrops": [],
+   "goodCrops": [],
+   "badCrops": [],
+   "plantingPeriods": [],
+   "harvestPeriods": [],
+   "litersPerSqm": 0
+  }
+ ],
+ "catchCrops": [
+  {
+   "name": "OILSEEDRADISH",
+   "label": "Ölrettich",
+   "veryGoodCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "POTATO",
+    "SUNFLOWER",
+    "OAT"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SORGHUM",
+    "SUGARBEET",
+    "ONION",
+    "BEETROOT",
+    "CARROT",
+    "PARSNIP",
+    "SPINACH",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "CANOLA",
+    "SOYBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "GREENBEAN"
+   ]
+  },
+  {
+   "name": "HUMUSACTIVE",
+   "label": "Humusaktiv",
+   "veryGoodCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "SUGARBEET",
+    "OAT"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SORGHUM",
+    "SOYBEAN",
+    "GREENBEAN",
+    "ONION",
+    "BEETROOT",
+    "CARROT",
+    "PARSNIP",
+    "SPINACH",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "CANOLA",
+    "SOYBEAN",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "GREENBEAN",
+    "SUNFLOWER",
+    "POTATO"
+   ]
+  },
+  {
+   "name": "MUSTARD",
+   "label": "Senf",
+   "veryGoodCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "SUGARBEET",
+    "SOYBEAN",
+    "PEA",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "GREENBEAN",
+    "OAT"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SORGHUM",
+    "ONION",
+    "BEETROOT",
+    "CARROT",
+    "PARSNIP",
+    "SPINACH",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "CANOLA",
+    "SUNFLOWER",
+    "POTATO"
+   ]
+  },
+  {
+   "name": "FLOWERINGCATCHCROP",
+   "label": "Blühende Zwischenfrucht",
+   "veryGoodCrops": [
+    "MAIZE",
+    "SILAGEMAIZE",
+    "SUGARBEET",
+    "OAT"
+   ],
+   "goodCrops": [
+    "WHEAT",
+    "BARLEY",
+    "SUMMERBARLEY",
+    "SORGHUM",
+    "SOYBEAN",
+    "GREENBEAN",
+    "ONION",
+    "BEETROOT",
+    "CARROT",
+    "PARSNIP",
+    "SPINACH",
+    "BUCKWHEAT"
+   ],
+   "badCrops": [
+    "CANOLA",
+    "SOYBEAN",
+    "PEAS",
+    "BEANS",
+    "LENTILS",
+    "GREENBEAN",
+    "SUNFLOWER",
+    "POTATO"
+   ]
+  }
+ ],
+ "pf": {
+  "soilTypes": [
+   {
+    "index": 1,
+    "name": "$l10n_ui_soilType_1",
+    "yieldPotential": 0.8
+   },
+   {
+    "index": 2,
+    "name": "$l10n_ui_soilType_2",
+    "yieldPotential": 1
+   },
+   {
+    "index": 3,
+    "name": "$l10n_ui_soilType_3",
+    "yieldPotential": 1.25
+   },
+   {
+    "index": 4,
+    "name": "$l10n_ui_soilType_4",
+    "yieldPotential": 0.9
+   }
+  ],
+  "nitrogenYieldMappings": [
+   {
+    "difference": -200,
+    "yieldFactor": 0
+   },
+   {
+    "difference": -180,
+    "yieldFactor": 0.01
+   },
+   {
+    "difference": -160,
+    "yieldFactor": 0.05
+   },
+   {
+    "difference": -140,
+    "yieldFactor": 0.14
+   },
+   {
+    "difference": -120,
+    "yieldFactor": 0.26
+   },
+   {
+    "difference": -100,
+    "yieldFactor": 0.4
+   },
+   {
+    "difference": -80,
+    "yieldFactor": 0.58
+   },
+   {
+    "difference": -60,
+    "yieldFactor": 0.7
+   },
+   {
+    "difference": -40,
+    "yieldFactor": 0.82
+   },
+   {
+    "difference": -20,
+    "yieldFactor": 0.9
+   },
+   {
+    "difference": -10,
+    "yieldFactor": 0.95
+   },
+   {
+    "difference": 0,
+    "yieldFactor": 1
+   },
+   {
+    "difference": 20,
+    "yieldFactor": 0.98
+   },
+   {
+    "difference": 40,
+    "yieldFactor": 0.96
+   },
+   {
+    "difference": 60,
+    "yieldFactor": 0.92
+   },
+   {
+    "difference": 80,
+    "yieldFactor": 0.89
+   },
+   {
+    "difference": 100,
+    "yieldFactor": 0.85
+   },
+   {
+    "difference": 120,
+    "yieldFactor": 0.82
+   },
+   {
+    "difference": 140,
+    "yieldFactor": 0.79
+   }
+  ],
+  "nitrogenRegularLevel": 170,
+  "nitrogenRequirements": {
+   "WHEAT": [
+    {
+     "soil": 1,
+     "targetLevel": 140,
+     "reduction": 140,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 180,
+     "reduction": 160,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 200,
+     "reduction": 180,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 160,
+     "reduction": 160,
+     "yieldPotential": 0.9
+    }
+   ],
+   "BARLEY": [
+    {
+     "soil": 1,
+     "targetLevel": 120,
+     "reduction": 100,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 140,
+     "reduction": 120,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 180,
+     "reduction": 160,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 120,
+     "reduction": 100,
+     "yieldPotential": 0.9
+    }
+   ],
+   "OAT": [
+    {
+     "soil": 1,
+     "targetLevel": 80,
+     "reduction": 60,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 100,
+     "reduction": 80,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 140,
+     "reduction": 120,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 100,
+     "reduction": 80,
+     "yieldPotential": 0.9
+    }
+   ],
+   "CANOLA": [
+    {
+     "soil": 1,
+     "targetLevel": 140,
+     "reduction": 140,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 180,
+     "reduction": 160,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 200,
+     "reduction": 180,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 160,
+     "reduction": 160,
+     "yieldPotential": 0.9
+    }
+   ],
+   "MAIZE": [
+    {
+     "soil": 1,
+     "targetLevel": 120,
+     "reduction": 80,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 160,
+     "reduction": 120,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 200,
+     "reduction": 150,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 180,
+     "reduction": 110,
+     "yieldPotential": 0.9
+    }
+   ],
+   "SORGHUM": [
+    {
+     "soil": 1,
+     "targetLevel": 100,
+     "reduction": 60,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 120,
+     "reduction": 80,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 160,
+     "reduction": 100,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 140,
+     "reduction": 100,
+     "yieldPotential": 0.9
+    }
+   ],
+   "SUNFLOWER": [
+    {
+     "soil": 1,
+     "targetLevel": 60,
+     "reduction": 30,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 80,
+     "reduction": 50,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 120,
+     "reduction": 70,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 80,
+     "reduction": 50,
+     "yieldPotential": 0.9
+    }
+   ],
+   "COTTON": [
+    {
+     "soil": 1,
+     "targetLevel": 80,
+     "reduction": 60,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 100,
+     "reduction": 60,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 120,
+     "reduction": 100,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 100,
+     "reduction": 80,
+     "yieldPotential": 0.9
+    }
+   ],
+   "GREENBEAN": [
+    {
+     "soil": 1,
+     "targetLevel": 100,
+     "reduction": 90,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 110,
+     "reduction": 100,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 130,
+     "reduction": 90,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 120,
+     "reduction": 100,
+     "yieldPotential": 0.9
+    }
+   ],
+   "SPINACH": [
+    {
+     "soil": 1,
+     "targetLevel": 150,
+     "reduction": 140,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 160,
+     "reduction": 140,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 170,
+     "reduction": 150,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 160,
+     "reduction": 150,
+     "yieldPotential": 0.9
+    }
+   ],
+   "RICE": [
+    {
+     "soil": 1,
+     "targetLevel": 100,
+     "reduction": 90,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 120,
+     "reduction": 100,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 140,
+     "reduction": 120,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 130,
+     "reduction": 120,
+     "yieldPotential": 0.9
+    }
+   ],
+   "RICELONGGRAIN": [
+    {
+     "soil": 1,
+     "targetLevel": 100,
+     "reduction": 90,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 120,
+     "reduction": 100,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 140,
+     "reduction": 120,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 130,
+     "reduction": 120,
+     "yieldPotential": 0.9
+    }
+   ],
+   "ONION": [
+    {
+     "soil": 1,
+     "targetLevel": 110,
+     "reduction": 100,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 130,
+     "reduction": 120,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 140,
+     "reduction": 120,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 120,
+     "reduction": 100,
+     "yieldPotential": 0.9
+    }
+   ],
+   "LINSEED": [
+    {
+     "soil": 1,
+     "targetLevel": 50,
+     "reduction": 40,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 80,
+     "reduction": 70,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 130,
+     "reduction": 110,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 110,
+     "reduction": 90,
+     "yieldPotential": 0.9
+    }
+   ]
+  },
+  "phMappings": [
+   {
+    "levelDifference": -20,
+    "yieldFactor": 0
+   },
+   {
+    "levelDifference": -19,
+    "yieldFactor": 0
+   },
+   {
+    "levelDifference": -18,
+    "yieldFactor": 0
+   },
+   {
+    "levelDifference": -17,
+    "yieldFactor": 0
+   },
+   {
+    "levelDifference": -16,
+    "yieldFactor": 0
+   },
+   {
+    "levelDifference": -15,
+    "yieldFactor": 0
+   },
+   {
+    "levelDifference": -14,
+    "yieldFactor": 0
+   },
+   {
+    "levelDifference": -13,
+    "yieldFactor": 0
+   },
+   {
+    "levelDifference": -12,
+    "yieldFactor": 0
+   },
+   {
+    "levelDifference": -11,
+    "yieldFactor": 0
+   },
+   {
+    "levelDifference": -10,
+    "yieldFactor": 0
+   },
+   {
+    "levelDifference": -9,
+    "yieldFactor": 0
+   },
+   {
+    "levelDifference": -8,
+    "yieldFactor": 0
+   },
+   {
+    "levelDifference": -7,
+    "yieldFactor": 0.2
+   },
+   {
+    "levelDifference": -6,
+    "yieldFactor": 0.4
+   },
+   {
+    "levelDifference": -5,
+    "yieldFactor": 0.6
+   },
+   {
+    "levelDifference": -4,
+    "yieldFactor": 0.8
+   },
+   {
+    "levelDifference": -3,
+    "yieldFactor": 0.9
+   },
+   {
+    "levelDifference": -2,
+    "yieldFactor": 0.95
+   },
+   {
+    "levelDifference": -1,
+    "yieldFactor": 0.975
+   },
+   {
+    "levelDifference": 0,
+    "yieldFactor": 1
+   },
+   {
+    "levelDifference": 1,
+    "yieldFactor": 0.975
+   },
+   {
+    "levelDifference": 2,
+    "yieldFactor": 0.95
+   },
+   {
+    "levelDifference": 3,
+    "yieldFactor": 0.925
+   },
+   {
+    "levelDifference": 5,
+    "yieldFactor": 0.875
+   },
+   {
+    "levelDifference": 6,
+    "yieldFactor": 0.8
+   },
+   {
+    "levelDifference": 7,
+    "yieldFactor": 0.6
+   },
+   {
+    "levelDifference": 8,
+    "yieldFactor": 0.4
+   },
+   {
+    "levelDifference": 9,
+    "yieldFactor": 0.2
+   },
+   {
+    "levelDifference": 10,
+    "yieldFactor": 0
+   }
+  ],
+  "phOptimal": {
+   "1": 6,
+   "2": 6.5,
+   "3": 6.75,
+   "4": 7
+  },
+  "phValuePerState": 0.125
+ }
+}
