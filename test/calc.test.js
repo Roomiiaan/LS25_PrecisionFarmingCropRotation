@@ -85,3 +85,9 @@ test('totalFactor multipliziert Fruchtfolge, Boden, Stickstoff und pH', () => {
   const input = { cropName: 'WINTERWHEAT', last: 'SOYBEAN', prev: 'PEA', catchCrop: null, soilIndex: 3, nitrogen: 200, ph: 6.75 };
   near(calc.totalFactor(data, input).total, 1.25 * 1.25);
 });
+
+test('totalFactor meldet, ob für die Frucht Stickstoffwerte vorliegen', () => {
+  const base = { last: null, prev: null, catchCrop: null, soilIndex: 2, nitrogen: 150, ph: null };
+  assert.equal(calc.totalFactor(data, { ...base, cropName: 'WINTERWHEAT' }).nitrogenKnown, true);
+  assert.equal(calc.totalFactor(data, { ...base, cropName: 'RYE' }).nitrogenKnown, false);
+});

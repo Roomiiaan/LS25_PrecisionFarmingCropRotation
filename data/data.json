@@ -2265,22 +2265,22 @@
   "soilTypes": [
    {
     "index": 1,
-    "name": "$l10n_ui_soilType_1",
+    "name": "Lehmiger Sand",
     "yieldPotential": 0.8
    },
    {
     "index": 2,
-    "name": "$l10n_ui_soilType_2",
+    "name": "Sandiger Lehm",
     "yieldPotential": 1
    },
    {
     "index": 3,
-    "name": "$l10n_ui_soilType_3",
+    "name": "Lehm",
     "yieldPotential": 1.25
    },
    {
     "index": 4,
-    "name": "$l10n_ui_soilType_4",
+    "name": "Schluffiger Ton",
     "yieldPotential": 0.9
    }
   ],

@@ -121,8 +121,10 @@ function main() {
   // --- Precision Farming
   const pf = text(pz, 'PrecisionFarming.xml');
   const block = (xml, tag) => xml.slice(xml.indexOf(`<${tag}`), xml.indexOf(`</${tag}>`));
+  const pfL10n = {};
+  for (const [, k, v] of text(pz, 'l10n/l10n_de.xml').matchAll(/<e\s+k="(\w+)"\s+v="([^"]*)"/g)) pfL10n[k] = v;
   const soilTypes = tags(block(pf, 'soilTypes'), 'soilType').map((s, i) => ({
-    index: i + 1, name: s.name, yieldPotential: Number(s.yieldPotential),
+    index: i + 1, name: pfL10n[s.name.replace('$l10n_', '')] || s.name, yieldPotential: Number(s.yieldPotential),
   }));
   const nBlock = block(pf, 'nitrogenMap');
   const nYield = block(nBlock, 'yieldMappings');

@@ -101,7 +101,8 @@
     const total = rotation * soil * nitrogen * ph;
     const crop = findCrop(data, input.cropName);
     const litersPerHa = crop && crop.litersPerSqm > 0 ? crop.litersPerSqm * 10000 * total : null;
-    return { rotation, soil, nitrogen, ph, total, litersPerHa };
+    const nitrogenKnown = Boolean(data.pf.nitrogenRequirements[NITROGEN_ALIAS[input.cropName] || input.cropName]);
+    return { rotation, soil, nitrogen, ph, total, litersPerHa, nitrogenKnown };
   }
 
   const api = { FALLOW, rotationFactor, soilFactor, nitrogenFactor, phFactor, totalFactor };

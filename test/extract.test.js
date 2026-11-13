@@ -42,3 +42,7 @@ test('Stickstoffwerte auch für Früchte mit Zusatzattributen (Kartoffel, Erbse)
   assert.ok(data.pf.nitrogenIgnoreOverfertilization.includes('POTATO'));
   assert.ok(!data.pf.nitrogenIgnoreOverfertilization.includes('WHEAT'));
 });
+
+test('Bodenarten haben deutsche Namen aus Precision Farming', () => {
+  assert.deepEqual(data.pf.soilTypes.map((s) => s.name), ['Lehmiger Sand', 'Sandiger Lehm', 'Lehm', 'Schluffiger Ton']);
+});
