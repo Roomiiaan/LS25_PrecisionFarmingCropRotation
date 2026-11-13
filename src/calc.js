@@ -66,6 +66,12 @@
   // Sorten, für die Precision Farming keine eigenen Stickstoffwerte hat, nutzen die der Art.
   const NITROGEN_ALIAS = { WINTERWHEAT: 'WHEAT', WINTERBARLEY: 'BARLEY', SUMMERBARLEY: 'BARLEY', SILAGEMAIZE: 'MAIZE' };
 
+  // Empirisch aus dem Spiel (docs/verification.md, 5 Messpunkte): Das Spiel wirkt mit nur einem Drittel des Abzugs,
+  // den die Mod-Tabellen für Stickstoff und pH nennen. Beim pH entspricht eine Tabellenstufe etwa 0,2 pH statt 0,125.
+  const PF_EFFECT_WEIGHT = 1 / 3;
+  const PH_EMPIRICAL_STEP = 0.2;
+  const damp = (factor) => 1 - (1 - factor) * PF_EFFECT_WEIGHT;
+
   const has = (v) => v !== null && v !== undefined && Number.isFinite(v);
 
   function soilFactor(data, soilIndex) {
@@ -82,15 +88,15 @@
     if (!req) return 1.0;
     const diff = nitrogen - req.targetLevel;
     if (diff > 0 && data.pf.nitrogenIgnoreOverfertilization.includes(key)) return 1.0;
-    return interpolate(data.pf.nitrogenYieldMappings.map((m) => [m.difference, m.yieldFactor]), diff);
+    return damp(interpolate(data.pf.nitrogenYieldMappings.map((m) => [m.difference, m.yieldFactor]), diff));
   }
 
   function phFactor(data, { soilIndex, ph }) {
     if (!has(soilIndex) || !has(ph)) return 1.0;
     const optimal = data.pf.phOptimal[soilIndex];
     if (optimal === undefined) return 1.0;
-    const level = Math.round((ph - optimal) / data.pf.phValuePerState);
-    return interpolate(data.pf.phMappings.map((m) => [m.levelDifference, m.yieldFactor]), level);
+    const level = (ph - optimal) / PH_EMPIRICAL_STEP;
+    return damp(interpolate(data.pf.phMappings.map((m) => [m.levelDifference, m.yieldFactor]), level));
   }
 
   function totalFactor(data, input) {

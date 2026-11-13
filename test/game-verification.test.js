@@ -33,3 +33,20 @@ test('Namen wie im Spiel: Weizen und Hirse', () => {
   assert.equal(label('CANOLA'), 'Raps');
   assert.equal(label('ALFALFA'), 'Luzerne');
 });
+
+// Precision-Farming-Faktoren aus dem Spiel (img_1 bis img_7). Das Spiel zeigt Erwartet/Potenzial ohne Fruchtfolge,
+// das Verhältnis ist also Stickstoff-Faktor x pH-Faktor. Toleranz: 1 Prozentpunkt.
+// Der Bodenfaktor für Schluffigen Ton (Spiel 99 %, Mod 0,9) ist ungeklärt und hier bewusst nicht enthalten.
+const pfFaelle = [
+  ['Feld 34 Mais, N 155/160, pH perfekt', 'MAIZE', 2, 155, 6.5, 11.9 / 12.0],
+  ['Feld 23 Luzerne Lehm, N 85/60, pH perfekt', 'ALFALFA', 3, 85, 6.75, 18.4 / 18.6],
+  ['Feld 23 Luzerne Ton, N 115/40, pH perfekt', 'ALFALFA', 4, 115, 7.0, 14.4 / 14.9],
+  ['Feld 23 Luzerne Ton, N 115/40, pH 6,750/7,000', 'ALFALFA', 4, 115, 6.75, 14.3 / 14.9],
+  ['Feld 23 Luzerne Ton, N 115/40, pH 6,375/7,000', 'ALFALFA', 4, 115, 6.375, 13.8 / 14.9],
+];
+for (const [name, cropName, soilIndex, nitrogen, ph, spiel] of pfFaelle) {
+  test(`Spielwerte PF: ${name}`, () => {
+    const mine = calc.nitrogenFactor(data, { cropName, soilIndex, nitrogen }) * calc.phFactor(data, { soilIndex, ph });
+    assert.ok(Math.abs(mine - spiel) <= 0.01, `Spiel ${(spiel * 100).toFixed(1)} %, berechnet ${(mine * 100).toFixed(1)} %`);
+  });
+}

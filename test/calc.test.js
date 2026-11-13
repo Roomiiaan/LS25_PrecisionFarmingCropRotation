@@ -36,14 +36,14 @@ test('soilFactor: Bodenart 3 = 1,25, ohne Eingabe = 1', () => {
   near(calc.soilFactor(data, null), 1);
 });
 
-test('nitrogenFactor: Zielwert = 1,0, 20 kg darunter = 0,90', () => {
+test('nitrogenFactor: Zielwert = 1,0, 20 kg darunter = 0,9667 (Tabelle 0,90, im Spiel nur ein Drittel des Abzugs)', () => {
   near(calc.nitrogenFactor(data, { cropName: 'WHEAT', soilIndex: 2, nitrogen: 180 }), 1.0);
-  near(calc.nitrogenFactor(data, { cropName: 'WHEAT', soilIndex: 2, nitrogen: 160 }), 0.9);
+  near(calc.nitrogenFactor(data, { cropName: 'WHEAT', soilIndex: 2, nitrogen: 160 }), 1 - 0.1 / 3);
 });
 
 test('nitrogenFactor: Extremwerte klemmen auf Tabellenrand, kein NaN', () => {
-  near(calc.nitrogenFactor(data, { cropName: 'WHEAT', soilIndex: 2, nitrogen: 999 }), 0.79);
-  near(calc.nitrogenFactor(data, { cropName: 'WHEAT', soilIndex: 2, nitrogen: 0 }), 0.01);
+  near(calc.nitrogenFactor(data, { cropName: 'WHEAT', soilIndex: 2, nitrogen: 999 }), 1 - 0.21 / 3);
+  near(calc.nitrogenFactor(data, { cropName: 'WHEAT', soilIndex: 2, nitrogen: 0 }), 1 - 0.99 / 3);
 });
 
 test('nitrogenFactor: Kartoffeln ignorieren Überdüngung', () => {
@@ -51,7 +51,7 @@ test('nitrogenFactor: Kartoffeln ignorieren Überdüngung', () => {
 });
 
 test('nitrogenFactor: Winterweizen nutzt die Werte von Weizen', () => {
-  near(calc.nitrogenFactor(data, { cropName: 'WINTERWHEAT', soilIndex: 2, nitrogen: 160 }), 0.9);
+  near(calc.nitrogenFactor(data, { cropName: 'WINTERWHEAT', soilIndex: 2, nitrogen: 160 }), 1 - 0.1 / 3);
 });
 
 test('nitrogenFactor: fehlende Eingabe oder unbekannte Frucht = 1,0', () => {
@@ -60,10 +60,10 @@ test('nitrogenFactor: fehlende Eingabe oder unbekannte Frucht = 1,0', () => {
   near(calc.nitrogenFactor(data, { cropName: 'SPELT', soilIndex: 2, nitrogen: 100 }), 1);
 });
 
-test('phFactor: Optimum = 1, 3 Stufen darunter = 0,9, Zwischenwert wird interpoliert', () => {
+test('phFactor: Optimum = 1, 0,6 pH darunter = 3 Tabellenstufen zu je 0,2 pH (0,9, gedämpft 0,9667)', () => {
   near(calc.phFactor(data, { soilIndex: 2, ph: 6.5 }), 1);
-  near(calc.phFactor(data, { soilIndex: 2, ph: 6.125 }), 0.9);
-  near(calc.phFactor(data, { soilIndex: 2, ph: 7.0 }), 0.9);
+  near(calc.phFactor(data, { soilIndex: 2, ph: 5.9 }), 1 - 0.1 / 3);
+  near(calc.phFactor(data, { soilIndex: 2, ph: 7.1 }), 1 - 0.075 / 3);
 });
 
 test('phFactor: extremer pH bleibt endlich, ohne Eingabe = 1', () => {
