@@ -48,7 +48,63 @@
     return 1.0 + mono + pause + fore + fallow + catchMul;
   }
 
-  const api = { FALLOW, rotationFactor };
+  // Lineare Interpolation über sortierte Punkte [x, y]; außerhalb des Bereichs auf den Rand geklemmt.
+  function interpolate(points, x) {
+    const pts = [...points].sort((a, b) => a[0] - b[0]);
+    if (x <= pts[0][0]) return pts[0][1];
+    if (x >= pts[pts.length - 1][0]) return pts[pts.length - 1][1];
+    for (let i = 1; i < pts.length; i++) {
+      if (x <= pts[i][0]) {
+        const [x0, y0] = pts[i - 1];
+        const [x1, y1] = pts[i];
+        return y0 + ((y1 - y0) * (x - x0)) / (x1 - x0);
+      }
+    }
+    return pts[pts.length - 1][1];
+  }
+
+  // Sorten, für die Precision Farming keine eigenen Stickstoffwerte hat, nutzen die der Art.
+  const NITROGEN_ALIAS = { WINTERWHEAT: 'WHEAT', WINTERBARLEY: 'BARLEY', SUMMERBARLEY: 'BARLEY', SILAGEMAIZE: 'MAIZE' };
+
+  const has = (v) => v !== null && v !== undefined && Number.isFinite(v);
+
+  function soilFactor(data, soilIndex) {
+    if (!has(soilIndex)) return 1.0;
+    const s = data.pf.soilTypes.find((t) => t.index === soilIndex);
+    return s ? s.yieldPotential : 1.0;
+  }
+
+  // nitrogen in kg/ha. Unbekannte Frucht/Boden oder fehlende Eingabe => 1,0.
+  function nitrogenFactor(data, { cropName, soilIndex, nitrogen }) {
+    if (!has(soilIndex) || !has(nitrogen)) return 1.0;
+    const key = NITROGEN_ALIAS[cropName] || cropName;
+    const req = (data.pf.nitrogenRequirements[key] || []).find((r) => r.soil === soilIndex);
+    if (!req) return 1.0;
+    const diff = nitrogen - req.targetLevel;
+    if (diff > 0 && data.pf.nitrogenIgnoreOverfertilization.includes(key)) return 1.0;
+    return interpolate(data.pf.nitrogenYieldMappings.map((m) => [m.difference, m.yieldFactor]), diff);
+  }
+
+  function phFactor(data, { soilIndex, ph }) {
+    if (!has(soilIndex) || !has(ph)) return 1.0;
+    const optimal = data.pf.phOptimal[soilIndex];
+    if (optimal === undefined) return 1.0;
+    const level = Math.round((ph - optimal) / data.pf.phValuePerState);
+    return interpolate(data.pf.phMappings.map((m) => [m.levelDifference, m.yieldFactor]), level);
+  }
+
+  function totalFactor(data, input) {
+    const rotation = rotationFactor(data, input);
+    const soil = soilFactor(data, input.soilIndex);
+    const nitrogen = nitrogenFactor(data, input);
+    const ph = phFactor(data, input);
+    const total = rotation * soil * nitrogen * ph;
+    const crop = findCrop(data, input.cropName);
+    const litersPerHa = crop && crop.litersPerSqm > 0 ? crop.litersPerSqm * 10000 * total : null;
+    return { rotation, soil, nitrogen, ph, total, litersPerHa };
+  }
+
+  const api = { FALLOW, rotationFactor, soilFactor, nitrogenFactor, phFactor, totalFactor };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Calc = api;
 })(typeof window !== 'undefined' ? window : globalThis);
