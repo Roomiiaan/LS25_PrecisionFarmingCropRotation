@@ -34,3 +34,11 @@ test('Precision-Farming-Daten', () => {
 test('Zwischenfrüchte enthalten MUSTARD', () => {
   assert.ok(data.catchCrops.some((c) => c.name === 'MUSTARD'));
 });
+
+test('Stickstoffwerte auch für Früchte mit Zusatzattributen (Kartoffel, Erbse)', () => {
+  const potato = data.pf.nitrogenRequirements.POTATO.find((s) => s.soil === 2);
+  assert.equal(potato.targetLevel, 120);
+  assert.ok(data.pf.nitrogenRequirements.PEA);
+  assert.ok(data.pf.nitrogenIgnoreOverfertilization.includes('POTATO'));
+  assert.ok(!data.pf.nitrogenIgnoreOverfertilization.includes('WHEAT'));
+});

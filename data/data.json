@@ -2520,6 +2520,58 @@
      "yieldPotential": 0.9
     }
    ],
+   "GRASS": [
+    {
+     "soil": 1,
+     "targetLevel": 50,
+     "reduction": 40,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 55,
+     "reduction": 40,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 65,
+     "reduction": 50,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 65,
+     "reduction": 55,
+     "yieldPotential": 0.9
+    }
+   ],
+   "MEADOW": [
+    {
+     "soil": 1,
+     "targetLevel": 55,
+     "reduction": 40,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 60,
+     "reduction": 40,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 65,
+     "reduction": 50,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 65,
+     "reduction": 55,
+     "yieldPotential": 0.9
+    }
+   ],
    "SUNFLOWER": [
     {
      "soil": 1,
@@ -2546,6 +2598,162 @@
      "yieldPotential": 0.9
     }
    ],
+   "SOYBEAN": [
+    {
+     "soil": 1,
+     "targetLevel": 0,
+     "reduction": 10,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 0,
+     "reduction": 10,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 0,
+     "reduction": 10,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 0,
+     "reduction": 10,
+     "yieldPotential": 0.9
+    }
+   ],
+   "POTATO": [
+    {
+     "soil": 1,
+     "targetLevel": 100,
+     "reduction": 80,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 120,
+     "reduction": 100,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 160,
+     "reduction": 120,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 140,
+     "reduction": 120,
+     "yieldPotential": 0.9
+    }
+   ],
+   "SUGARBEET": [
+    {
+     "soil": 1,
+     "targetLevel": 120,
+     "reduction": 100,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 140,
+     "reduction": 120,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 180,
+     "reduction": 140,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 160,
+     "reduction": 120,
+     "yieldPotential": 0.9
+    }
+   ],
+   "CARROT": [
+    {
+     "soil": 1,
+     "targetLevel": 80,
+     "reduction": 70,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 90,
+     "reduction": 80,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 110,
+     "reduction": 90,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 100,
+     "reduction": 80,
+     "yieldPotential": 0.9
+    }
+   ],
+   "PARSNIP": [
+    {
+     "soil": 1,
+     "targetLevel": 100,
+     "reduction": 60,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 120,
+     "reduction": 80,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 140,
+     "reduction": 100,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 140,
+     "reduction": 100,
+     "yieldPotential": 0.9
+    }
+   ],
+   "BEETROOT": [
+    {
+     "soil": 1,
+     "targetLevel": 100,
+     "reduction": 60,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 120,
+     "reduction": 80,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 140,
+     "reduction": 100,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 140,
+     "reduction": 100,
+     "yieldPotential": 0.9
+    }
+   ],
    "COTTON": [
     {
      "soil": 1,
@@ -2569,6 +2777,84 @@
      "soil": 4,
      "targetLevel": 100,
      "reduction": 80,
+     "yieldPotential": 0.9
+    }
+   ],
+   "POPLAR": [
+    {
+     "soil": 1,
+     "targetLevel": 120,
+     "reduction": 100,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 160,
+     "reduction": 120,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 180,
+     "reduction": 160,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 140,
+     "reduction": 120,
+     "yieldPotential": 0.9
+    }
+   ],
+   "SUGARCANE": [
+    {
+     "soil": 1,
+     "targetLevel": 120,
+     "reduction": 100,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 160,
+     "reduction": 140,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 200,
+     "reduction": 160,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 180,
+     "reduction": 120,
+     "yieldPotential": 0.9
+    }
+   ],
+   "PEA": [
+    {
+     "soil": 1,
+     "targetLevel": 0,
+     "reduction": 10,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 0,
+     "reduction": 10,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 0,
+     "reduction": 10,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 0,
+     "reduction": 10,
      "yieldPotential": 0.9
     }
    ],
@@ -2702,6 +2988,214 @@
      "yieldPotential": 0.9
     }
    ],
+   "GRAPE": [
+    {
+     "soil": 1,
+     "targetLevel": 70,
+     "reduction": 65,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 80,
+     "reduction": 70,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 90,
+     "reduction": 80,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 75,
+     "reduction": 60,
+     "yieldPotential": 0.9
+    }
+   ],
+   "OLIVE": [
+    {
+     "soil": 1,
+     "targetLevel": 80,
+     "reduction": 70,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 110,
+     "reduction": 90,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 120,
+     "reduction": 100,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 100,
+     "reduction": 80,
+     "yieldPotential": 0.9
+    }
+   ],
+   "OILSEEDRADISH": [
+    {
+     "soil": 1,
+     "targetLevel": 0,
+     "reduction": 0,
+     "yieldPotential": 0
+    },
+    {
+     "soil": 2,
+     "targetLevel": 0,
+     "reduction": 0,
+     "yieldPotential": 0
+    },
+    {
+     "soil": 3,
+     "targetLevel": 0,
+     "reduction": 0,
+     "yieldPotential": 0
+    },
+    {
+     "soil": 4,
+     "targetLevel": 0,
+     "reduction": 0,
+     "yieldPotential": 0
+    }
+   ],
+   "DRYGRASS": [
+    {
+     "soil": 1,
+     "targetLevel": 0,
+     "reduction": 0,
+     "yieldPotential": 0
+    },
+    {
+     "soil": 2,
+     "targetLevel": 0,
+     "reduction": 0,
+     "yieldPotential": 0
+    },
+    {
+     "soil": 3,
+     "targetLevel": 0,
+     "reduction": 0,
+     "yieldPotential": 0
+    },
+    {
+     "soil": 4,
+     "targetLevel": 0,
+     "reduction": 0,
+     "yieldPotential": 0
+    }
+   ],
+   "WEED": [
+    {
+     "soil": 1,
+     "targetLevel": 0,
+     "reduction": 0,
+     "yieldPotential": 0
+    },
+    {
+     "soil": 2,
+     "targetLevel": 0,
+     "reduction": 0,
+     "yieldPotential": 0
+    },
+    {
+     "soil": 3,
+     "targetLevel": 0,
+     "reduction": 0,
+     "yieldPotential": 0
+    },
+    {
+     "soil": 4,
+     "targetLevel": 0,
+     "reduction": 0,
+     "yieldPotential": 0
+    }
+   ],
+   "ALFALFA": [
+    {
+     "soil": 1,
+     "targetLevel": 20,
+     "reduction": 20,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 40,
+     "reduction": 40,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 60,
+     "reduction": 60,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 40,
+     "reduction": 40,
+     "yieldPotential": 0.9
+    }
+   ],
+   "CLOVER": [
+    {
+     "soil": 1,
+     "targetLevel": 40,
+     "reduction": 40,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 60,
+     "reduction": 60,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 80,
+     "reduction": 80,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 40,
+     "reduction": 40,
+     "yieldPotential": 0.9
+    }
+   ],
+   "INCARASE_GRASS": [
+    {
+     "soil": 1,
+     "targetLevel": 160,
+     "reduction": 140,
+     "yieldPotential": 0.8
+    },
+    {
+     "soil": 2,
+     "targetLevel": 180,
+     "reduction": 160,
+     "yieldPotential": 1
+    },
+    {
+     "soil": 3,
+     "targetLevel": 200,
+     "reduction": 180,
+     "yieldPotential": 1.25
+    },
+    {
+     "soil": 4,
+     "targetLevel": 200,
+     "reduction": 180,
+     "yieldPotential": 0.9
+    }
+   ],
    "LINSEED": [
     {
      "soil": 1,
@@ -2729,6 +3223,20 @@
     }
    ]
   },
+  "nitrogenIgnoreOverfertilization": [
+   "GRASS",
+   "MEADOW",
+   "SOYBEAN",
+   "POTATO",
+   "SUGARBEET",
+   "CARROT",
+   "PARSNIP",
+   "BEETROOT",
+   "POPLAR",
+   "PEA",
+   "GRAPE",
+   "OLIVE"
+  ],
   "phMappings": [
    {
     "levelDifference": -20,

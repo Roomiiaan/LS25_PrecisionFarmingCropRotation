@@ -131,8 +131,11 @@ function main() {
   }));
   const nitrogenRegularLevel = Number(attrs(nBlock.match(/<yieldMappings\b([^>]*)>/)[1]).regularLevel);
   const nitrogenRequirements = {};
-  for (const m of nBlock.matchAll(/<fruitRequirement\s+fruitTypeName="(\w+)">([\s\S]*?)<\/fruitRequirement>/g)) {
-    nitrogenRequirements[m[1].toUpperCase()] = tags(m[2], 'soil').map((s) => ({
+  const nitrogenIgnoreOverfertilization = [];
+  for (const m of nBlock.matchAll(/<fruitRequirement\s+fruitTypeName="(\w+)"([^>]*)>([\s\S]*?)<\/fruitRequirement>/g)) {
+    const key = m[1].toUpperCase();
+    if (attrs(m[2]).ignoreOverfertilization === 'true') nitrogenIgnoreOverfertilization.push(key);
+    nitrogenRequirements[key] = tags(m[3], 'soil').map((s) => ({
       soil: Number(s.soilTypeIndex),
       targetLevel: Number(s.targetLevel),
       reduction: Number(s.reduction),
@@ -161,7 +164,7 @@ function main() {
       },
     },
     settings, crops, catchCrops,
-    pf: { soilTypes, nitrogenYieldMappings, nitrogenRegularLevel, nitrogenRequirements, phMappings, phOptimal, phValuePerState },
+    pf: { soilTypes, nitrogenYieldMappings, nitrogenRegularLevel, nitrogenRequirements, nitrogenIgnoreOverfertilization, phMappings, phOptimal, phValuePerState },
   };
   fs.mkdirSync(path.dirname(OUT), { recursive: true });
   fs.writeFileSync(OUT, JSON.stringify(data, null, 1));
