@@ -46,3 +46,17 @@ test('Stickstoffwerte auch für Früchte mit Zusatzattributen (Kartoffel, Erbse)
 test('Bodenarten haben deutsche Namen aus Precision Farming', () => {
   assert.deepEqual(data.pf.soilTypes.map((s) => s.name), ['Lehmiger Sand', 'Sandiger Lehm', 'Lehm', 'Schluffiger Ton']);
 });
+
+test('Erntefenster: bis vor den Wechsel zu "dead", ohne Lücken', () => {
+  assert.deepEqual(crop('WINTERWHEAT').harvestPeriods, ['EARLY_SUMMER', 'MID_SUMMER']);
+  assert.deepEqual(crop('SPELT').harvestPeriods, ['EARLY_SUMMER', 'MID_SUMMER']);
+  assert.deepEqual(crop('POTATO').harvestPeriods, ['MID_SUMMER', 'LATE_SUMMER']);
+  assert.deepEqual(crop('MAIZE').harvestPeriods, ['EARLY_AUTUMN', 'MID_AUTUMN', 'LATE_AUTUMN']);
+});
+
+test('Jede planbare Frucht hat Saat- und Erntefenster', () => {
+  for (const c of data.crops.filter((x) => x.onMap && !x.ignoreInPlanner)) {
+    assert.ok(c.plantingPeriods.length > 0, `${c.name}: Saatfenster fehlt`);
+    assert.ok(c.harvestPeriods.length > 0, `${c.name}: Erntefenster fehlt`);
+  }
+});

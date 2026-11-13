@@ -56,7 +56,6 @@
     "LATE_SUMMER",
     "EARLY_AUTUMN",
     "MID_AUTUMN",
-    "LATE_AUTUMN",
     "LATE_WINTER"
    ],
    "litersPerSqm": 1.95
@@ -90,7 +89,6 @@
     "LATE_SUMMER",
     "EARLY_AUTUMN",
     "MID_AUTUMN",
-    "LATE_AUTUMN",
     "LATE_WINTER"
    ],
    "litersPerSqm": 2.25
@@ -124,7 +122,6 @@
     "LATE_SUMMER",
     "EARLY_AUTUMN",
     "MID_AUTUMN",
-    "LATE_AUTUMN",
     "LATE_WINTER"
    ],
    "litersPerSqm": 2.55
@@ -173,8 +170,7 @@
    ],
    "harvestPeriods": [
     "MID_SUMMER",
-    "LATE_SUMMER",
-    "EARLY_AUTUMN"
+    "LATE_SUMMER"
    ],
    "litersPerSqm": 0.45
   },
@@ -222,8 +218,7 @@
    ],
    "harvestPeriods": [
     "EARLY_SUMMER",
-    "MID_SUMMER",
-    "LATE_SUMMER"
+    "MID_SUMMER"
    ],
    "litersPerSqm": 0.525
   },
@@ -314,8 +309,7 @@
    ],
    "harvestPeriods": [
     "EARLY_SUMMER",
-    "MID_SUMMER",
-    "LATE_SUMMER"
+    "MID_SUMMER"
    ],
    "litersPerSqm": 0.45
   },
@@ -411,8 +405,7 @@
    ],
    "harvestPeriods": [
     "LATE_SPRING",
-    "EARLY_SUMMER",
-    "MID_SUMMER"
+    "EARLY_SUMMER"
    ],
    "litersPerSqm": 0.5
   },
@@ -455,8 +448,7 @@
    ],
    "harvestPeriods": [
     "EARLY_SUMMER",
-    "MID_SUMMER",
-    "LATE_SUMMER"
+    "MID_SUMMER"
    ],
    "litersPerSqm": 0.425
   },
@@ -504,8 +496,7 @@
    ],
    "harvestPeriods": [
     "EARLY_SUMMER",
-    "MID_SUMMER",
-    "LATE_SUMMER"
+    "MID_SUMMER"
    ],
    "litersPerSqm": 0.45
   },
@@ -555,8 +546,7 @@
    ],
    "harvestPeriods": [
     "EARLY_SUMMER",
-    "MID_SUMMER",
-    "LATE_SUMMER"
+    "MID_SUMMER"
    ],
    "litersPerSqm": 0.5
   },
@@ -651,7 +641,7 @@
    ],
    "harvestPeriods": [
     "EARLY_SUMMER",
-    "LATE_SUMMER"
+    "MID_SUMMER"
    ],
    "litersPerSqm": 0.4
   },
@@ -698,8 +688,7 @@
     "MID_AUTUMN"
    ],
    "harvestPeriods": [
-    "EARLY_SPRING",
-    "MID_SPRING"
+    "EARLY_SPRING"
    ],
    "litersPerSqm": 0.5332
   },
@@ -750,8 +739,7 @@
    ],
    "harvestPeriods": [
     "MID_SUMMER",
-    "LATE_SUMMER",
-    "EARLY_AUTUMN"
+    "LATE_SUMMER"
    ],
    "litersPerSqm": 0.45
   },
@@ -798,8 +786,7 @@
     "MID_AUTUMN"
    ],
    "harvestPeriods": [
-    "EARLY_SPRING",
-    "MID_SPRING"
+    "EARLY_SPRING"
    ],
    "litersPerSqm": 0.5332
   },
@@ -847,8 +834,7 @@
    ],
    "harvestPeriods": [
     "EARLY_AUTUMN",
-    "MID_AUTUMN",
-    "LATE_AUTUMN"
+    "MID_AUTUMN"
    ],
    "litersPerSqm": 0.275
   },
@@ -899,9 +885,7 @@
     "MID_SUMMER",
     "LATE_SUMMER",
     "EARLY_AUTUMN",
-    "MID_AUTUMN",
-    "LATE_AUTUMN",
-    "EARLY_WINTER"
+    "MID_AUTUMN"
    ],
    "litersPerSqm": 0.6
   },
@@ -950,9 +934,7 @@
    "harvestPeriods": [
     "EARLY_SUMMER",
     "MID_SUMMER",
-    "LATE_SUMMER",
-    "EARLY_AUTUMN",
-    "MID_AUTUMN"
+    "LATE_SUMMER"
    ],
    "litersPerSqm": 0.5278
   },
@@ -1134,7 +1116,6 @@
     "LATE_SUMMER",
     "EARLY_AUTUMN",
     "MID_AUTUMN",
-    "LATE_AUTUMN",
     "LATE_WINTER"
    ],
    "litersPerSqm": 2.48
@@ -1179,7 +1160,6 @@
     "LATE_SUMMER",
     "EARLY_AUTUMN",
     "MID_AUTUMN",
-    "LATE_AUTUMN",
     "LATE_WINTER"
    ],
    "litersPerSqm": 2.37
@@ -1236,8 +1216,7 @@
    "harvestPeriods": [
     "EARLY_AUTUMN",
     "MID_AUTUMN",
-    "LATE_AUTUMN",
-    "EARLY_WINTER"
+    "LATE_AUTUMN"
    ],
    "litersPerSqm": 0.75
   },
@@ -1293,9 +1272,7 @@
    ],
    "harvestPeriods": [
     "EARLY_AUTUMN",
-    "MID_AUTUMN",
-    "LATE_AUTUMN",
-    "EARLY_WINTER"
+    "MID_AUTUMN"
    ],
    "litersPerSqm": 0.92
   },
@@ -1345,8 +1322,7 @@
    ],
    "harvestPeriods": [
     "EARLY_SUMMER",
-    "MID_SUMMER",
-    "LATE_SUMMER"
+    "MID_SUMMER"
    ],
    "litersPerSqm": 0.25
   },
@@ -1396,8 +1372,7 @@
    ],
    "harvestPeriods": [
     "EARLY_AUTUMN",
-    "MID_AUTUMN",
-    "LATE_AUTUMN"
+    "MID_AUTUMN"
    ],
    "litersPerSqm": 0.25
   },
@@ -1663,8 +1638,7 @@
    ],
    "harvestPeriods": [
     "MID_SUMMER",
-    "LATE_SUMMER",
-    "EARLY_AUTUMN"
+    "LATE_SUMMER"
    ],
    "litersPerSqm": 3.75
   },
@@ -1712,8 +1686,7 @@
    ],
    "harvestPeriods": [
     "EARLY_AUTUMN",
-    "MID_AUTUMN",
-    "LATE_AUTUMN"
+    "MID_AUTUMN"
    ],
    "litersPerSqm": 5.78
   },
@@ -1815,9 +1788,7 @@
     "MID_SUMMER",
     "LATE_SUMMER",
     "EARLY_AUTUMN",
-    "MID_AUTUMN",
-    "LATE_AUTUMN",
-    "EARLY_WINTER"
+    "MID_AUTUMN"
    ],
    "litersPerSqm": 3.25
   },
@@ -1873,9 +1844,7 @@
     "MID_SUMMER",
     "LATE_SUMMER",
     "EARLY_AUTUMN",
-    "MID_AUTUMN",
-    "LATE_AUTUMN",
-    "EARLY_WINTER"
+    "MID_AUTUMN"
    ],
    "litersPerSqm": 4.348
   },
@@ -1930,9 +1899,7 @@
     "MID_SUMMER",
     "LATE_SUMMER",
     "EARLY_AUTUMN",
-    "MID_AUTUMN",
-    "LATE_AUTUMN",
-    "EARLY_WINTER"
+    "MID_AUTUMN"
    ],
    "litersPerSqm": 3.25
   },
@@ -1983,8 +1950,7 @@
     "MID_SUMMER",
     "LATE_SUMMER",
     "EARLY_AUTUMN",
-    "MID_AUTUMN",
-    "LATE_AUTUMN"
+    "MID_AUTUMN"
    ],
    "litersPerSqm": 2.31
   },
@@ -2016,8 +1982,7 @@
    ],
    "harvestPeriods": [
     "MID_SUMMER",
-    "LATE_SUMMER",
-    "EARLY_AUTUMN"
+    "LATE_SUMMER"
    ],
    "litersPerSqm": 0.66
   },
@@ -2047,8 +2012,7 @@
     "MID_SPRING"
    ],
    "harvestPeriods": [
-    "LATE_SUMMER",
-    "EARLY_AUTUMN"
+    "LATE_SUMMER"
    ],
    "litersPerSqm": 0.9
   },
@@ -2080,8 +2044,7 @@
    ],
    "harvestPeriods": [
     "EARLY_AUTUMN",
-    "MID_AUTUMN",
-    "LATE_AUTUMN"
+    "MID_AUTUMN"
    ],
    "litersPerSqm": 0.497
   },

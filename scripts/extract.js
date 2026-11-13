@@ -39,22 +39,30 @@ const nums = (s) => list(s).map(Number);
 const version = (xml) => (xml.match(/<version>([^<]+)<\/version>/) || [])[1];
 
 function foliage(xml) {
-  const planting = [];
-  const harvest = [];
-  const growth = xml.slice(xml.indexOf('<growth>'));
+  const gi = xml.indexOf('<growth>');
+  if (gi < 0) throw new Error('<growth> fehlt in einer Foliage-Datei');
   // Erntereife Zustände heißen je Frucht anders (z. B. harvestReady3); sie tragen isHarvestReady="true".
   const ready = new Set(
-    tags(xml.slice(0, xml.indexOf('<growth>')), 'foliageState')
+    tags(xml.slice(0, gi), 'foliageState')
       .filter((s) => s.isHarvestReady === 'true' || s.name === 'harvestReady').map((s) => s.name));
-  const isReady = (body) => tags(body, 'update').some((u) => ready.has(u.startState) || ready.has(u.endState));
-  for (const m of growth.matchAll(/<period\b([^>]*?)(\/>|>([\s\S]*?)<\/period>)/g)) {
-    const a = attrs(m[1]);
-    if (a.plantingAllowed === 'true') planting.push(a.name);
-    if (isReady(m[3] || '')) harvest.push(a.name);
+  const periods = [...xml.slice(gi).matchAll(/<period\b([^>]*?)(\/>|>([\s\S]*?)<\/period>)/g)].map((m) => ({
+    name: attrs(m[1]).name, planting: attrs(m[1]).plantingAllowed === 'true', updates: tags(m[3] || '', 'update'),
+  }));
+  const planting = periods.filter((p) => p.planting).map((p) => p.name);
+  // Zustand über zwei Jahre simulieren (Wrap): erntereif ab der Periode mit Update in einen reifen Zustand,
+  // nicht mehr erntereif in der Periode, in der ein reifer Zustand zu einem nicht reifen wechselt (dead/geerntet).
+  const harvest = new Set();
+  let isReady = false;
+  for (let pass = 0; pass < 2; pass++) {
+    for (const p of periods) {
+      if (p.updates.some((u) => ready.has(u.startState) && !ready.has(u.endState))) isReady = false;
+      else if (p.updates.some((u) => ready.has(u.endState))) isReady = true;
+      if (isReady && pass === 1) harvest.add(p.name);
+    }
   }
   const liters = (xml.match(/<harvest\b[^>]*litersPerSqm="([\d.]+)"/) || [])[1];
   const name = (xml.match(/<fruitType\s+name="(\w+)"/) || [])[1];
-  return { name: name && name.toUpperCase(), planting, harvest, litersPerSqm: liters ? Number(liters) : 0 };
+  return { name: name && name.toUpperCase(), planting, harvest: periods.map((p) => p.name).filter((n) => harvest.has(n)), litersPerSqm: liters ? Number(liters) : 0 };
 }
 
 function main() {
