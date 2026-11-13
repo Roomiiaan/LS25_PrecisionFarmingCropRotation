@@ -9,11 +9,11 @@ const OUT = path.join(__dirname, '..', 'data', 'data.json');
 
 // Deutsche Namen der Basisspiel-Früchte (stehen nicht in den Mods).
 const FALLBACK_DE = {
-  WHEAT: 'Sommerweizen', WINTERWHEAT: 'Winterweizen', BARLEY: 'Gerste', SUMMERBARLEY: 'Sommergerste',
+  WHEAT: 'Weizen', WINTERWHEAT: 'Winterweizen', BARLEY: 'Gerste', SUMMERBARLEY: 'Sommergerste',
   WINTERBARLEY: 'Wintergerste', OAT: 'Hafer', CANOLA: 'Raps', MAIZE: 'Mais', SILAGEMAIZE: 'Silomais',
   SUNFLOWER: 'Sonnenblumen', SOYBEAN: 'Sojabohnen', POTATO: 'Kartoffeln', SUGARBEET: 'Zuckerrüben',
   BEETROOT: 'Rote Bete', CARROT: 'Karotten', PARSNIP: 'Pastinaken', GREENBEAN: 'Grüne Bohnen',
-  PEA: 'Erbsen', SPINACH: 'Spinat', SORGHUM: 'Sorghum', OILSEEDRADISH: 'Ölrettich', RYE: 'Roggen',
+  PEA: 'Erbsen', SPINACH: 'Spinat', SORGHUM: 'Hirse', OILSEEDRADISH: 'Ölrettich', RYE: 'Roggen',
   TRITICALE: 'Triticale', SPELT: 'Dinkel', VETCHRYE: 'Wickroggen', GREENRYE: 'Grünroggen',
   HUMUSACTIVE: 'Humusaktiv', MUSTARD: 'Senf', FLOWERINGCATCHCROP: 'Blühende Zwischenfrucht',
   ALFALFA: 'Luzerne', CLOVER: 'Klee', FIELDGRASS: 'Ackergras', GRASS: 'Gras', MEADOW: 'Wiese',

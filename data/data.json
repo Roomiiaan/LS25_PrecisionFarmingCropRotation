@@ -128,7 +128,7 @@
   },
   {
    "name": "WHEAT",
-   "label": "Sommerweizen",
+   "label": "Weizen",
    "onMap": true,
    "ignoreInPlanner": false,
    "breakPeriods": 1,
@@ -694,7 +694,7 @@
   },
   {
    "name": "SORGHUM",
-   "label": "Sorghum",
+   "label": "Hirse",
    "onMap": true,
    "ignoreInPlanner": false,
    "breakPeriods": 1,
