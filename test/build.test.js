@@ -60,3 +60,9 @@ test('Ertragsbalken haben Farbstufen (grün/gelb/orange/rot) in beiden Themes', 
 test('Fußzeile enthält "Made with ♥ and Claude Code"', () => {
   assert.ok(/Made with\s*<span[^>]*>♥<\/span>\s*and Claude Code/.test(html));
 });
+
+test('Bodenart ist eine optionale Mehrfachauswahl (Schalter-Gruppe)', () => {
+  assert.ok(/id="soil"[^>]*role="group"|role="group"[^>]*id="soil"/.test(html));
+  assert.ok(html.includes('mehrere möglich'));
+  assert.ok(html.includes('.chip-soil'));
+});

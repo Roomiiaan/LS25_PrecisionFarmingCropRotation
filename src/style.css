@@ -22,6 +22,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:15p
 .inputs.precise{grid-template-columns:repeat(3,1fr);margin-top:12px}
 label{display:block;font-size:13px;font-weight:600;color:var(--mut);margin-bottom:5px}
 select,input{width:100%;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;padding:0 12px}
+.lbl{display:block;font-size:13px;font-weight:600;color:var(--mut);margin-bottom:5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.inputs.precise>div:first-child{grid-column:1/-1}
+.chip-soil{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;cursor:pointer}
+.chip-soil:hover{border-color:var(--pri)}
+.chip-soil[aria-pressed="true"]{background:var(--priS);border-color:var(--pri);color:var(--ink);font-weight:700}
+.chip-soil[aria-pressed="true"]::before{content:"✓ "}
+.bar i.max{opacity:.35}
 .combo{position:relative}
 .combo-btn{width:100%;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;text-align:left}
 .combo-btn:hover,.combo-btn[aria-expanded="true"]{border-color:var(--pri)}

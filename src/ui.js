@@ -34,14 +34,21 @@
   fill($('last'), historyItems);
   fill($('month'), Cal.MONTH_ORDER.map(function (p) { return { value: p, label: Cal.periodLabel(p) }; }));
   fill($('catch'), [{ value: '', label: 'keine' }].concat(data.catchCrops.map(function (c) { return { value: c.name, label: c.label }; })));
-  fill($('soil'), [{ value: '', label: 'unbekannt' }].concat(data.pf.soilTypes.map(function (s) { return { value: String(s.index), label: s.name }; })));
 
   // Alle Auswahllisten bekommen eine Suche (direkt lostippen) und ein einheitliches Aussehen.
-  var combos = ['prev', 'last', 'month', 'catch', 'soil'].map(function (k) { return window.Combo.enhance($(k)); });
+  var combos = ['prev', 'last', 'month', 'catch'].map(function (k) { return window.Combo.enhance($(k)); });
   function refreshCombos() { combos.forEach(function (c) { c.refresh(); }); }
 
   // ---- Zustand (Feld-Tabs)
-  var KEYS = ['prev', 'last', 'month', 'catch', 'soil', 'ph', 'nitrogen'];
+  var KEYS = ['prev', 'last', 'month', 'catch', 'ph', 'nitrogen'];
+  // Bodenarten: optionale Mehrfachauswahl, gespeichert als "1,3" (leer = keine Angabe).
+  function soilList(s) { return s ? s.split(',').map(Number).filter(function (n) { return isFinite(n) && n > 0; }) : []; }
+  function renderSoil() {
+    var sel = soilList(state.soil);
+    $('soil').innerHTML = data.pf.soilTypes.map(function (s) {
+      return '<button type="button" class="chip-soil" data-soil="' + s.index + '" aria-pressed="' + (sel.indexOf(s.index) >= 0) + '">' + esc(s.name) + '</button>';
+    }).join('');
+  }
   function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   var store = Tabs.load(read(KEY), read(LEGACY_KEY));
   var state = null; // das aktive Feld
@@ -65,6 +72,7 @@
     if (!$('month').value) $('month').selectedIndex = 0;
     $('month').value = Cal.MONTH_ORDER.indexOf(state.month) >= 0 ? state.month : 'MID_AUTUMN';
     refreshCombos();
+    renderSoil();
     document.querySelector('.more').open = Boolean(state.soil || state.ph || state.nitrogen);
     renderTabs();
     render();
@@ -88,23 +96,33 @@
   function render() {
     var input = {
       last: state.last || null, prev: state.prev || null, catchCrop: state.catch || null, period: state.month,
-      soilIndex: state.soil ? Number(state.soil) : null, nitrogen: num(state.nitrogen), ph: num(state.ph),
+      soilIndexes: soilList(state.soil), nitrogen: num(state.nitrogen), ph: num(state.ph),
     };
+    var hasSoil = input.soilIndexes.length > 0;
     var rows = Plan.buildPlan(data, input);
     var yes = rows.filter(function (r) { return r.plantable; }).length;
     $('summary').innerHTML = '<span class="chip ok">✓ ' + yes + ' jetzt säbar</span><span class="chip no">– ' + (rows.length - yes) + ' nicht säbar</span>';
     $('rows').innerHTML = rows.map(function (r) {
       var f = r.factors, c = r.crop;
+      var multi = r.range !== null;
       var parts = ['Fruchtfolge ' + pct(f.rotation)];
-      if (input.soilIndex) parts.push('Boden ' + pct(f.soil));
-      if (input.soilIndex && input.nitrogen !== null) parts.push(f.nitrogenKnown ? 'N ' + pct(f.nitrogen) : 'N: keine Daten');
-      if (input.soilIndex && input.ph !== null) parts.push('pH ' + pct(f.ph));
-      var liters = f.litersPerHa ? '≈ ' + (Math.round(f.litersPerHa / 10) * 10).toLocaleString('de-DE') + ' l/ha · ' : '';
+      if (multi) parts.push('Spanne aus ' + input.soilIndexes.length + ' Bodenarten');
+      else if (hasSoil) parts.push('Boden ' + pct(f.soil));
+      if (hasSoil && !multi && input.nitrogen !== null) parts.push(f.nitrogenKnown ? 'N ' + pct(f.nitrogen) : 'N: keine Daten');
+      if (hasSoil && !multi && input.ph !== null) parts.push('pH ' + pct(f.ph));
+      if (multi && input.nitrogen !== null && !f.nitrogenKnown) parts.push('N: keine Daten');
+      var lit = function (l) { return (Math.round(l / 10) * 10).toLocaleString('de-DE'); };
+      var liters = multi ? (r.range.litersMin ? '≈ ' + lit(r.range.litersMin) + '–' + lit(r.range.litersMax) + ' l/ha · ' : '')
+        : (f.litersPerHa ? '≈ ' + lit(f.litersPerHa) + ' l/ha · ' : '');
       var status = r.plantable ? '✓ Jetzt säbar' : '– Nicht säbar im ' + Cal.periodLabel(state.month);
-      var width = Math.max(2, Math.min(100, (f.total / 1.6) * 100));
-      return '<article class="row grid ' + (r.plantable ? 'ok' : 'no') + ' lvl-' + Plan.yieldLevel(f.total) + '">' +
+      var w = function (t) { return Math.max(2, Math.min(100, (t / 1.6) * 100)).toFixed(1); };
+      var low = multi ? r.range.min : f.total; // Farbstufe nach dem vorsichtigeren Wert
+      var pctText = multi ? Math.round(r.range.min * 100) + '–' + Math.round(r.range.max * 100) + ' %' : pct(f.total);
+      var bar = multi ? '<i class="max" style="width:' + w(r.range.max) + '%"></i><i style="width:' + w(r.range.min) + '%"></i>'
+        : '<i style="width:' + w(f.total) + '%"></i>';
+      return '<article class="row grid ' + (r.plantable ? 'ok' : 'no') + ' lvl-' + Plan.yieldLevel(low) + '">' +
         '<div><div class="nm">' + esc(c.label) + '</div><div class="st">' + status + ' · Saat ' + esc(r.plantingLabel) + '</div></div>' +
-        '<div><div class="pct">' + pct(f.total) + '</div><div class="bar" aria-hidden="true"><i style="width:' + width.toFixed(1) + '%"></i></div>' +
+        '<div><div class="pct">' + pctText + '</div><div class="bar" aria-hidden="true">' + bar + '</div>' +
         '<div class="sub">' + liters + esc(parts.join(' · ')) + '</div></div>' +
         strip(c, state.month) + '</article>';
     }).join('');
@@ -125,6 +143,22 @@
       save();
       render();
     });
+  });
+
+  // Bodenart-Schalter: einzeln an/aus, Mehrfachauswahl erlaubt.
+  $('soil').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('.chip-soil') : null;
+    if (!b) return;
+    var n = Number(b.getAttribute('data-soil')), sel = soilList(state.soil);
+    var next = sel.indexOf(n) >= 0 ? sel.filter(function (x) { return x !== n; }) : sel.concat(n);
+    next.sort();
+    store = Tabs.updateField(store, store.active, { soil: next.join(',') });
+    state = activeField();
+    save();
+    renderSoil();
+    render();
+    var again = document.querySelector('.chip-soil[data-soil="' + n + '"]');
+    if (again) again.focus();
   });
 
   // ---- Feld-Tabs bedienen

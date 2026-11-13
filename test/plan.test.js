@@ -73,3 +73,39 @@ test('yieldLevel: Stufen nach angezeigtem Prozentwert (grün ab 100, gelb ab 90,
   assert.equal(yieldLevel(0.74), 'bad');
   assert.equal(yieldLevel(0), 'bad');
 });
+
+// ---- Mehrere Bodenarten (optional): Spanne statt Einzelwert
+const calcMod = require('../src/calc.js');
+const baseIn = { last: 'BARLEY', prev: 'WINTERWHEAT', catchCrop: null, period: 'EARLY_SPRING', nitrogen: 150, ph: 6.25 };
+const rowOf = (rows, n) => rows.find((r) => r.crop.name === n);
+
+test('eine Bodenart als Liste verhält sich wie bisher (keine Spanne)', () => {
+  const a = rowOf(buildPlan(data, { ...baseIn, soilIndexes: [2] }), 'WHEAT');
+  const b = rowOf(buildPlan(data, { ...baseIn, soilIndex: 2 }), 'WHEAT');
+  assert.equal(a.range, null);
+  assert.ok(Math.abs(a.factors.total - b.factors.total) < 1e-9);
+});
+
+test('keine Bodenart: keine Spanne, nur Fruchtfolge', () => {
+  const r = rowOf(buildPlan(data, { ...baseIn, soilIndexes: [] }), 'WHEAT');
+  assert.equal(r.range, null);
+  assert.ok(Math.abs(r.factors.total - r.factors.rotation) < 1e-9);
+});
+
+test('zwei Bodenarten: Spanne min/max, Gesamtwert ist der Mittelwert', () => {
+  const r = rowOf(buildPlan(data, { ...baseIn, soilIndexes: [1, 3] }), 'WHEAT');
+  const t1 = calcMod.totalFactor(data, { ...baseIn, cropName: 'WHEAT', soilIndex: 1 }).total;
+  const t3 = calcMod.totalFactor(data, { ...baseIn, cropName: 'WHEAT', soilIndex: 3 }).total;
+  assert.ok(r.range.min < r.range.max);
+  assert.ok(Math.abs(r.range.min - Math.min(t1, t3)) < 1e-9);
+  assert.ok(Math.abs(r.range.max - Math.max(t1, t3)) < 1e-9);
+  assert.ok(Math.abs(r.factors.total - (t1 + t3) / 2) < 1e-9);
+  assert.ok(r.range.litersMin < r.range.litersMax);
+});
+
+test('Sortierung nach Mittelwert, säbare zuerst, auch bei Spanne', () => {
+  const rows = buildPlan(data, { ...baseIn, period: 'MID_AUTUMN', soilIndexes: [1, 3] });
+  const firstNo = rows.findIndex((r) => !r.plantable);
+  const yes = firstNo < 0 ? rows : rows.slice(0, firstNo);
+  for (let i = 1; i < yes.length; i++) assert.ok(yes[i - 1].factors.total >= yes[i].factors.total);
+});

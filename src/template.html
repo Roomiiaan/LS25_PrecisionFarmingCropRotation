@@ -47,11 +47,14 @@
     <details class="more">
       <summary>Genauere Werte (Bodenart, pH, Stickstoff)</summary>
       <div class="inputs precise">
-        <div><label for="soil">Bodenart</label><select id="soil"></select></div>
+        <div>
+          <span class="lbl" id="soil-label">Bodenart (optional, mehrere möglich)</span>
+          <div id="soil" class="chips" role="group" aria-labelledby="soil-label"></div>
+        </div>
         <div><label for="ph">pH-Wert</label><input id="ph" type="number" step="0.125" min="3" max="9" inputmode="decimal" placeholder="z. B. 6,5"></div>
         <div><label for="nitrogen">Stickstoff (kg/ha)</label><input id="nitrogen" type="number" step="5" min="0" max="400" inputmode="numeric" placeholder="z. B. 120"></div>
       </div>
-      <p class="hint">Leere Felder werden nicht mitgerechnet. Brache wählst du bei den Früchten oben aus.</p>
+      <p class="hint">Keine Bodenart: nur Fruchtfolge. Eine Bodenart: genauer Wert. Mehrere (z. B. bei gemischten Feldern): eine Spanne von–bis. pH und Stickstoff rechnet die Seite nur mit, wenn mindestens eine Bodenart gewählt ist. Leere Felder werden nicht mitgerechnet.</p>
     </details>
   </section>
 
