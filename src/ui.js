@@ -94,7 +94,8 @@
 
   // ---- Zwischenfrucht-Vergleich
   var cpPct = function (r) { return r.range ? Math.round(r.range.min * 100) + '–' + Math.round(r.range.max * 100) + ' %' : pct(r.factors.total); };
-  var cpMonth = function (period, wraps) { return Cal.periodLabel(period) + (wraps ? ' (nächstes Jahr)' : ''); };
+  var cpYear = function (n) { return n <= 0 ? '' : n === 1 ? ' (nächstes Jahr)' : n === 2 ? ' (übernächstes Jahr)' : ' (in ' + n + ' Jahren)'; };
+  var cpMonth = function (period, years) { return Cal.periodLabel(period) + cpYear(years); };
   function renderCatchPlan(input) {
     var out = CatchPlan.buildCatchPlan(data, input);
     var month = Cal.periodLabel(input.period);
@@ -106,7 +107,7 @@
       ? 'Direkt säen im ' + esc(month) + ': beste Frucht ' + esc(out.direct.crop.label) + ' mit ' + cpPct(out.direct) + '.'
       : 'Direkt ist im ' + esc(month) + ' keine Hauptfrucht säbar.';
     var item = function (s) {
-      return '<li><span>' + esc(s.row.crop.label) + ' ' + cpPct(s.row) + '</span><span>ab ' + esc(cpMonth(s.sowPeriod, s.wrapsYear)) + ', +' + s.delayMonths + ' Monate</span></li>';
+      return '<li><span>' + esc(s.row.crop.label) + ' ' + cpPct(s.row) + '</span><span>ab ' + esc(cpMonth(s.sowPeriod, s.yearsAhead)) + ', +' + s.delayMonths + ' Monate</span></li>';
     };
     $('catch-plan').innerHTML = '<p class="cp-direct">' + direct + '</p><div class="cp-grid">' + out.cards.map(function (c) {
       var top = c.sowable.slice(0, 6), rest = c.sowable.slice(6);
@@ -116,7 +117,7 @@
       else verdict = '– Lohnt sich nicht: direkt säen bringt ' + cpPct(out.direct) + ' (' + esc(out.direct.crop.label) + '), mit Zwischenfrucht höchstens ' + cpPct(c.best.row) + ' (' + esc(c.best.row.crop.label) + ')';
       return '<article class="cp-card' + (c.verdict === 'better' ? '' : ' worse') + '">' +
         '<h3>' + esc(c.catchCrop.label) + '</h3>' +
-        '<div class="cp-ready">gesät ' + esc(Cal.periodLabel(c.sowPeriod)) + ' → gewachsen im ' + esc(cpMonth(c.readyPeriod, c.readyWrapsYear)) + ' (nach ' + c.readyAfter + ' Monaten)</div>' +
+        '<div class="cp-ready">gesät ' + esc(Cal.periodLabel(c.sowPeriod)) + ' → gewachsen im ' + esc(cpMonth(c.readyPeriod, c.readyYearsAhead)) + ' (nach ' + c.readyAfter + ' Monaten)</div>' +
         (top.length ? '<ul class="cp-list">' + top.map(item).join('') + '</ul>' : '') +
         (rest.length ? '<details class="cp-more"><summary>weitere ' + rest.length + '</summary><ul class="cp-list">' + rest.map(item).join('') + '</ul></details>' : '') +
         (c.blocked.length ? '<div class="cp-blocked">Im Zeitraum nicht säbar: ' + c.blocked.map(function (r) { return esc(r.crop.label); }).join(', ') + '</div>' : '') +

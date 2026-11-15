@@ -50,9 +50,11 @@
   // Die Periode k Monate später (zyklisch, k >= 0).
   const shiftPeriod = (period, k) => PERIODS[(idx(period) + k) % PERIODS.length];
   // Liegt die um k verschobene Periode im folgenden Kalenderjahr (Januar bis Dezember)?
-  const wrapsYear = (period, k) => k >= PERIODS.length || MONTH_ORDER.indexOf(shiftPeriod(period, k)) < MONTH_ORDER.indexOf(period);
+  // Anzahl der Jahreswechsel (Januar bis Dezember) bis zur um k verschobenen Periode: 0 = gleiches Jahr, 1 = nächstes Jahr, ...
+  const yearsAhead = (period, k) => Math.floor((MONTH_ORDER.indexOf(period) + k) / PERIODS.length);
+  const wrapsYear = (period, k) => yearsAhead(period, k) > 0;
 
-  const api = { PERIODS, MONTH_ORDER, periodLabel, periodShort, isPlantable, firstHarvestPeriod, formatWindow, shiftPeriod, wrapsYear };
+  const api = { PERIODS, MONTH_ORDER, periodLabel, periodShort, isPlantable, firstHarvestPeriod, formatWindow, shiftPeriod, wrapsYear, yearsAhead };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Calendar = api;
 })(typeof window !== 'undefined' ? window : globalThis);

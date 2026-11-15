@@ -13,7 +13,8 @@
   // Die Zwischenfrucht wird gesät, wächst bis 'harvestReady', wird untergegrubbert und danach wird die Hauptfrucht gesät.
   // Der Bonus gilt ab dem Säen. Je Hauptfrucht zählt der erste Monat im Zeitraum, in dem sie säbar ist.
   function buildCatchPlan(data, input) {
-    const directRows = Plan.buildPlan(data, input);
+    // Direkt säen = ohne Zwischenfrucht (auch wenn im Dropdown eine gewählt ist), sonst kippt der Vergleich.
+    const directRows = Plan.buildPlan(data, Object.assign({}, input, { catchCrop: null }));
     const direct = directRows.length && directRows[0].plantable ? directRows[0] : null;
 
     const cards = [];
@@ -33,7 +34,7 @@
           if (Cal.isPlantable(row.crop, Cal.shiftPeriod(input.period, k))) found = k;
         }
         if (found === null) blocked.push(row);
-        else sowable.push({ row, sowPeriod: Cal.shiftPeriod(input.period, found), delayMonths: found, wrapsYear: Cal.wrapsYear(input.period, found) });
+        else sowable.push({ row, sowPeriod: Cal.shiftPeriod(input.period, found), delayMonths: found, wrapsYear: Cal.wrapsYear(input.period, found), yearsAhead: Cal.yearsAhead(input.period, found) });
       }
       sowable.sort((a, b) => b.row.factors.total - a.row.factors.total || a.row.crop.label.localeCompare(b.row.crop.label, 'de'));
       blocked.sort((a, b) => a.crop.label.localeCompare(b.crop.label, 'de'));
@@ -47,6 +48,7 @@
         readyPeriod,
         readyAfter,
         readyWrapsYear: Cal.wrapsYear(input.period, readyAfter),
+        readyYearsAhead: Cal.yearsAhead(input.period, readyAfter),
         sowable,
         blocked,
         best,

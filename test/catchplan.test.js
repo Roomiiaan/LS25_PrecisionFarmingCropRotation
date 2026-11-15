@@ -63,3 +63,17 @@ test('Mehrere Bodenarten und leere Vorfrüchte werfen nicht', () => {
   assert.ok(plan.cards.length > 0);
   for (const c of plan.cards) for (const s of c.sowable) assert.ok(Number.isFinite(s.row.factors.total));
 });
+
+test('Direktvergleich rechnet die Zwischenfrucht aus dem Dropdown nicht mit ein', () => {
+  const ohne = CatchPlan.buildCatchPlan(data, { ...base, period: 'MID_SUMMER' });
+  const mit = CatchPlan.buildCatchPlan(data, { ...base, period: 'MID_SUMMER', catchCrop: 'OILSEEDRADISH' });
+  assert.equal(mit.direct.crop.name, ohne.direct.crop.name);
+  assert.equal(mit.direct.factors.total, ohne.direct.factors.total);
+});
+
+test('Saat im übernächsten Jahr wird als solche erkannt', () => {
+  const c = card(CatchPlan.buildCatchPlan(data, { ...base, period: 'EARLY_AUTUMN' }), 'FLOWERINGCATCHCROP');
+  assert.equal(c.readyYearsAhead, 1); // September + 10 Monate = Juli nächstes Jahr
+  assert.ok(c.sowable.some((s) => s.yearsAhead === 2));
+  for (const s of c.sowable) assert.equal(s.wrapsYear, s.yearsAhead > 0);
+});

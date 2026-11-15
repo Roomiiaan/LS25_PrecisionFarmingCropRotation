@@ -123,3 +123,10 @@ test('wrapsYear: Verschiebung ins nächste Kalenderjahr (Jan–Dez)', () => {
   assert.equal(cal.wrapsYear('MID_AUTUMN', 5), true);    // Oktober + 5 = März
   assert.equal(cal.wrapsYear('EARLY_SPRING', 12), true);
 });
+
+test('yearsAhead: Zahl der Jahreswechsel (Jan–Dez)', () => {
+  assert.equal(cal.yearsAhead('MID_SPRING', 3), 0);
+  assert.equal(cal.yearsAhead('MID_AUTUMN', 5), 1);
+  assert.equal(cal.yearsAhead('EARLY_AUTUMN', 17), 2); // September + 17 Monate = Februar im übernächsten Jahr
+  assert.equal(cal.yearsAhead('EARLY_AUTUMN', 10), 1);
+});
