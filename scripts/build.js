@@ -6,7 +6,7 @@ const root = path.join(__dirname, '..');
 const read = (p) => fs.readFileSync(path.join(root, p), 'utf8');
 const data = JSON.parse(read('data/data.json'));
 
-const scripts = ['src/calc.js', 'src/calendar.js', 'src/plan.js', 'src/tabs.js', 'src/search.js', 'src/combo.js', 'src/ui.js'].map(read).join('\n');
+const scripts = ['src/calc.js', 'src/calendar.js', 'src/plan.js', 'src/catchplan.js', 'src/tabs.js', 'src/search.js', 'src/combo.js', 'src/ui.js'].map(read).join('\n');
 const json = JSON.stringify(data).replace(/</g, '\\u003c');
 const v = data.meta.versions;
 
