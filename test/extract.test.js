@@ -18,7 +18,7 @@ test('Winterweizen: Regeln und Kalender', () => {
   assert.ok(w.veryGoodCrops.includes('SOYBEAN'));
   assert.ok(w.plantingPeriods.includes('EARLY_AUTUMN'));
   assert.ok(w.plantingPeriods.includes('MID_AUTUMN'));
-  assert.ok(w.harvestPeriods.includes('EARLY_SUMMER'));
+  assert.ok(w.harvestPeriods.includes('MID_SUMMER'));
   assert.ok(w.litersPerSqm > 0);
   assert.ok(w.label && w.label !== 'WINTERWHEAT');
 });
@@ -47,11 +47,11 @@ test('Bodenarten haben deutsche Namen aus Precision Farming', () => {
   assert.deepEqual(data.pf.soilTypes.map((s) => s.name), ['Lehmiger Sand', 'Sandiger Lehm', 'Lehm', 'Schluffiger Ton']);
 });
 
-test('Erntefenster: bis vor den Wechsel zu "dead", ohne Lücken', () => {
-  assert.deepEqual(crop('WINTERWHEAT').harvestPeriods, ['EARLY_SUMMER', 'MID_SUMMER']);
-  assert.deepEqual(crop('SPELT').harvestPeriods, ['EARLY_SUMMER', 'MID_SUMMER']);
-  assert.deepEqual(crop('POTATO').harvestPeriods, ['MID_SUMMER', 'LATE_SUMMER']);
-  assert.deepEqual(crop('MAIZE').harvestPeriods, ['EARLY_AUTUMN', 'MID_AUTUMN', 'LATE_AUTUMN']);
+test('Erntefenster: Updates wirken am Periodenende, Fenster endet mit der Periode des Wechsels zu "dead", ohne Lücken', () => {
+  assert.deepEqual(crop('WINTERWHEAT').harvestPeriods, ['MID_SUMMER', 'LATE_SUMMER']);
+  assert.deepEqual(crop('SPELT').harvestPeriods, ['MID_SUMMER', 'LATE_SUMMER']);
+  assert.deepEqual(crop('POTATO').harvestPeriods, ['LATE_SUMMER', 'EARLY_AUTUMN']);
+  assert.deepEqual(crop('MAIZE').harvestPeriods, ['MID_AUTUMN', 'LATE_AUTUMN', 'EARLY_WINTER']);
 });
 
 test('Jede planbare Frucht hat Saat- und Erntefenster', () => {

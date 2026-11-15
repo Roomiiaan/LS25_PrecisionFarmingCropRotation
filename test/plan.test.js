@@ -29,8 +29,8 @@ test('isPlantable: Frucht ohne Saatfenster ist nie säbar und wirft nicht', () =
   assert.equal(cal.isPlantable({ plantingPeriods: [] }, 'EARLY_SPRING'), false);
 });
 
-test('firstHarvestPeriod: Winterweizen = Frühsommer, Fenster über Jahreswechsel beginnt am Anfang', () => {
-  assert.equal(cal.firstHarvestPeriod(crop('WINTERWHEAT')), 'EARLY_SUMMER');
+test('firstHarvestPeriod: Winterweizen = Hochsommer, Fenster über Jahreswechsel beginnt am Anfang', () => {
+  assert.equal(cal.firstHarvestPeriod(crop('WINTERWHEAT')), 'MID_SUMMER');
   assert.equal(cal.firstHarvestPeriod({ harvestPeriods: ['EARLY_SPRING', 'LATE_WINTER'] }), 'LATE_WINTER');
   assert.equal(cal.firstHarvestPeriod({ harvestPeriods: [] }), null);
 });

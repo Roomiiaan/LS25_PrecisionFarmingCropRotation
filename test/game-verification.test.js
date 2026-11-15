@@ -54,3 +54,25 @@ for (const [name, cropName, soilIndex, nitrogen, ph, spiel] of pfFaelle) {
     assert.ok(Math.abs(mine - spiel) <= 0.01, `Spiel ${(spiel * 100).toFixed(1)} %, berechnet ${(mine * 100).toFixed(1)} %`);
   });
 }
+
+// Anbaukalender aus dem Spiel (img_10.png): Saat- und Erntemonate. Die Updates der Map-Mod wirken am Periodenende,
+// die Ernte beginnt daher eine Periode nach dem Wechsel in den reifen Zustand (siehe scripts/extract.js).
+const kalender = [
+  ['CANOLA', 'Aug–Sep', 'Jul–Aug'],
+  ['RICE', 'Apr–Mai', 'Aug–Sep'],
+  ['RYE', 'Sep–Okt', 'Jul–Aug'],
+  ['BEETROOT', 'Apr–Jun', 'Aug–Nov'],
+  ['SILAGEMAIZE', 'Apr–Jul', 'Okt–Dez'],
+  ['SOYBEAN', 'Apr–Mai', 'Okt–Nov'],
+  ['SUNFLOWER', 'Mär–Apr', 'Okt–Nov'],
+  ['SPINACH', 'Mär–Mai', 'Jun–Nov'],
+  ['TRITICALE', 'Sep–Okt', 'Jul–Aug'],
+];
+const cal = require('../src/calendar.js');
+for (const [name, saat, ernte] of kalender) {
+  test(`Spielwerte Kalender: ${name} Saat ${saat}, Ernte ${ernte}`, () => {
+    const c = data.crops.find((x) => x.name === name);
+    assert.equal(cal.formatWindow(c.plantingPeriods), saat);
+    assert.equal(cal.formatWindow(c.harvestPeriods), ernte);
+  });
+}

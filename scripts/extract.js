@@ -55,17 +55,24 @@ function foliage(xml) {
     name: attrs(m[1]).name, planting: attrs(m[1]).plantingAllowed === 'true', updates: tags(m[3] || '', 'update'),
   }));
   const planting = periods.filter((p) => p.planting).map((p) => p.name);
-  // Zustand über zwei Jahre simulieren (Wrap): erntereif ab der Periode mit Update in einen reifen Zustand,
-  // nicht mehr erntereif in der Periode, in der ein reifer Zustand zu einem nicht reifen wechselt (dead/geerntet).
+  // Eine Pflanze je Saatperiode von 'invisible' an durch die Jahre verfolgen (Abgleich mit dem Anbaukalender im
+  // Spiel): Die Updates einer Periode wirken an ihrem Ende, pro Periode rückt eine Pflanze genau eine Stufe vor.
+  // Erntereif ist eine Periode, wenn die Pflanze bei ihrem Beginn in einem reifen Zustand steht. Das Erntefenster
+  // ist die Vereinigung über alle Saatperioden; eine Pflanze endet, sobald sie nach der Reife den reifen Zustand verlässt.
   const harvest = new Set();
-  let isReady = false;
-  for (let pass = 0; pass < 2; pass++) {
-    for (const p of periods) {
-      if (p.updates.some((u) => ready.has(u.startState) && !ready.has(u.endState))) isReady = false;
-      else if (p.updates.some((u) => ready.has(u.endState))) isReady = true;
-      if (isReady && pass === 1) harvest.add(p.name);
+  const usesInvisible = periods.some((p) => p.updates.some((u) => u.startState === 'invisible'));
+  periods.forEach((sow, s) => {
+    if (!sow.planting) return;
+    // Frisch gesäte Pflanzen starten in 'invisible'; Früchte ohne diesen Zustand (Reis) starten mit dem ersten Update der Saatperiode.
+    let state = usesInvisible ? 'invisible' : (sow.updates[0] || {}).startState;
+    let wasReady = false;
+    for (let k = 0; k < periods.length * 2; k++) {
+      const p = periods[(s + k) % periods.length];
+      if (ready.has(state)) { harvest.add(p.name); wasReady = true; } else if (wasReady) break;
+      const u = p.updates.find((x) => x.startState === state);
+      if (u) state = u.endState;
     }
-  }
+  });
   const liters = (xml.match(/<harvest\b[^>]*litersPerSqm="([\d.]+)"/) || [])[1];
   const name = (xml.match(/<fruitType\s+name="(\w+)"/) || [])[1];
   return { name: name && name.toUpperCase(), planting, harvest: periods.map((p) => p.name).filter((n) => harvest.has(n)), litersPerSqm: liters ? Number(liters) : 0 };

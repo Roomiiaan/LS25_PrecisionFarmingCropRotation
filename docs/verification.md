@@ -93,3 +93,15 @@ Benötigt für den nächsten Schritt: ein Fall mit deutlich zu wenig Stickstoff 
 
 Benötigt pro Fall: Bodenart, pH, Stickstoff (kg/ha), geplante Frucht und der vom Spiel angezeigte Ertrag bzw. das Ertragspotenzial (mit Fundstelle im Spiel, am besten Screenshot).
 Toleranz: ±1 Prozentpunkt.
+
+## Teil 3: Saat- und Erntekalender (`img_10.png`) – ERLEDIGT
+
+Quelle: Anbaukalender im Spiel (9 Früchte: Raps, Reis, Roggen, Rote Bete, Silage Mais, Sojabohnen, Sonnenblumen, Spinat, Triticale). Test: `Spielwerte Kalender` in `test/game-verification.test.js`.
+
+Befund: Die **Saatfenster** stimmten schon, die **Erntefenster** waren falsch (meist einen Monat zu früh, bei Silage Mais Sep–Okt statt Okt–Dez, bei Rote Bete Apr–Okt statt Aug–Nov).
+
+Ursachen in `scripts/extract.js` (beide behoben):
+1. Die Updates der Map-Mod wirken **am Ende der Periode** (steht so im Kommentar der Reis-Datei). Erntereif ist eine Periode also erst, wenn die Pflanze bei ihrem Beginn schon reif ist.
+2. Es wurde ein gemeinsamer Zustand für alle Pflanzen geführt. Richtig ist: je Saatperiode eine Pflanze von der Aussaat an verfolgen (pro Periode eine Stufe), das Erntefenster ist die Vereinigung. Sonst zählen Updates für Pflanzen, die es im Jahr noch gar nicht geben kann (Rote Bete ab April).
+
+Ergebnis: 9 von 9 Früchten stimmen in Saat und Ernte. Betroffen waren fast alle Erntefenster (z. B. Weizen, Mais, Kartoffeln, Zuckerrüben); Gras, Wiese, Luzerne und Klee haben jetzt ebenfalls Erntefenster (Apr–Nov), diese sind **nicht** gegen das Spiel geprüft.
