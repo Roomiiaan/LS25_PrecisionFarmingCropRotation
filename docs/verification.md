@@ -80,6 +80,15 @@ Umgesetzt in `src/calc.js` (`PF_EFFECT_WEIGHT = 1/3`, `PH_EMPIRICAL_STEP = 0,2`)
 
 **Wichtig:** Das ist ein empirisches Modell, an 5 Messpunkten angepasst. Belegt für Stickstoff −5 bis +75 kg/ha und pH −0,625 bis 0. Nicht belegt: sehr niedriger Stickstoff, pH über dem Optimum, Ton-Bodenfaktor.
 
+### Fall 6: Feld 17, Lehmiger Sand, sehr wenig Stickstoff (`img_8.png`, `img_9.png`) – ABWEICHUNG
+
+Spiel: Silage Mais, Lehmiger Sand (Feld zu ca. 90 % Lehmiger Sand), pH **5,750 / 6,000** (Gut), Stickstoff **20 / 120** (Schlecht, −100), Fruchtfolge 115 %, **Erwartet 67 % | 4,3 t/ha**, **Potenzial 80 % | 5,2 t/ha**.
+
+- Bodenfaktor Lehmiger Sand: Spiel 80 %, Mod 0,8 ✔.
+- Verhältnis Spiel: 4,3 / 5,2 = 0,827 (Rundungsbereich ca. 0,81–0,85). Modell: Stickstoff 0,80 × pH 0,99 = 0,792 ✘ (ca. 3,5 Punkte zu niedrig).
+- Bei pH-Abzug ca. 1 % bleibt für Stickstoff ca. 0,84 im Spiel. Mod-XML bei −100: 0,40, „ein Drittel" ergibt 0,80. Das Spiel liegt eher bei 0,84 (Abzug ca. 16 %), also nicht ganz ein Drittel. Eine Ursache ist nicht belegt (andere Gewichtung bei großen Abweichungen, andere Zielmenge, Rundung).
+- Der Test ist als `todo` eingetragen (läuft mit, bricht `npm test` aber nicht). Das Modell wurde bewusst nicht an einem Punkt nachgezogen.
+
 Benötigt für den nächsten Schritt: ein Fall mit deutlich zu wenig Stickstoff (z. B. 80–100 kg/ha bei Ziel 160) und einer mit abweichendem pH, am besten auf einem Feld mit nur einer Bodenart.
 
 Benötigt pro Fall: Bodenart, pH, Stickstoff (kg/ha), geplante Frucht und der vom Spiel angezeigte Ertrag bzw. das Ertragspotenzial (mit Fundstelle im Spiel, am besten Screenshot).
