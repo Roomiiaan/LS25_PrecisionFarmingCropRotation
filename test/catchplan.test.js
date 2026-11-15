@@ -77,3 +77,18 @@ test('Saat im übernächsten Jahr wird als solche erkannt', () => {
   assert.ok(c.sowable.some((s) => s.yearsAhead === 2));
   for (const s of c.sowable) assert.equal(s.wrapsYear, s.yearsAhead > 0);
 });
+
+test('Gleichstand beim Ertrag: früherer Monat zuerst', () => {
+  const c = card(CatchPlan.buildCatchPlan(data, { ...base, period: 'MID_SUMMER' }), 'OILSEEDRADISH');
+  for (let i = 1; i < c.sowable.length; i++) {
+    const a = c.sowable[i - 1], b = c.sowable[i];
+    if (a.row.factors.total === b.row.factors.total) assert.ok(a.delayMonths <= b.delayMonths);
+  }
+});
+
+test('top ist die Zwischenfrucht mit dem besten Ertrag der besten Folgefrucht', () => {
+  const plan = CatchPlan.buildCatchPlan(data, { ...base, period: 'MID_SUMMER' });
+  const best = Math.max(...plan.cards.filter((c) => c.best).map((c) => c.best.row.factors.total));
+  assert.equal(card(plan, plan.top).best.row.factors.total, best);
+  assert.equal(CatchPlan.buildCatchPlan(data, { ...base, period: 'EARLY_WINTER' }).top, null);
+});

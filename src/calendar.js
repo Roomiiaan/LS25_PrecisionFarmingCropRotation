@@ -54,7 +54,16 @@
   const yearsAhead = (period, k) => Math.floor((MONTH_ORDER.indexOf(period) + k) / PERIODS.length);
   const wrapsYear = (period, k) => yearsAhead(period, k) > 0;
 
-  const api = { PERIODS, MONTH_ORDER, periodLabel, periodShort, isPlantable, firstHarvestPeriod, formatWindow, shiftPeriod, wrapsYear, yearsAhead };
+  // Wartezeit in Monaten als Text: 'in 5 Monaten', 'in 1 Jahr 3 Monaten'.
+  function formatWait(k) {
+    if (k <= 0) return 'sofort';
+    const y = Math.floor(k / 12), m = k % 12;
+    const years = y === 1 ? '1 Jahr' : y + ' Jahren';
+    const months = m === 1 ? '1 Monat' : m + ' Monaten';
+    return 'in ' + (y ? years + (m ? ' ' + months : '') : months);
+  }
+
+  const api = { PERIODS, MONTH_ORDER, periodLabel, periodShort, isPlantable, firstHarvestPeriod, formatWindow, shiftPeriod, wrapsYear, yearsAhead, formatWait };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Calendar = api;
 })(typeof window !== 'undefined' ? window : globalThis);

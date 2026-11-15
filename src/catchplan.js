@@ -36,7 +36,7 @@
         if (found === null) blocked.push(row);
         else sowable.push({ row, sowPeriod: Cal.shiftPeriod(input.period, found), delayMonths: found, wrapsYear: Cal.wrapsYear(input.period, found), yearsAhead: Cal.yearsAhead(input.period, found) });
       }
-      sowable.sort((a, b) => b.row.factors.total - a.row.factors.total || a.row.crop.label.localeCompare(b.row.crop.label, 'de'));
+      sowable.sort((a, b) => b.row.factors.total - a.row.factors.total || a.delayMonths - b.delayMonths || a.row.crop.label.localeCompare(b.row.crop.label, 'de'));
       blocked.sort((a, b) => a.crop.label.localeCompare(b.crop.label, 'de'));
 
       const best = sowable.length ? sowable[0] : null;
@@ -56,7 +56,12 @@
         gain,
       });
     }
-    return { direct, cards };
+    // top: Zwischenfrucht, deren beste Folgefrucht den höchsten Ertrag hat (bei Gleichstand die erste); ohne Karten null.
+    let top = null;
+    for (const c of cards) {
+      if (c.best && (top === null || c.best.row.factors.total > top.best.row.factors.total)) top = c;
+    }
+    return { direct, cards, top: top ? top.catchCrop.name : null };
   }
 
   const api = { buildCatchPlan };

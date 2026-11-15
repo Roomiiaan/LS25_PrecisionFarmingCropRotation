@@ -36,3 +36,9 @@ Layout der Karten (zwei Themes beachten, Status nie nur über Farbe), Texte, Tes
 - A: Zwischenfrüchte als zusätzliche Zeilen in der Liste: wenig Aufwand, aber kein Vergleich, Liste wird unübersichtlich.
 - **B (gewählt):** eigener Bereich mit Karten: zeigt Reife, Folgefrüchte und das Fazit „lohnt sich oder nicht".
 - C: nur Knopf „Monat auf Reife setzen": minimal, sagt aber nicht, ob es sich lohnt.
+
+## Nachtrag: Tabs statt Karten (vom Nutzer gewünscht und bestätigt)
+- Jede jetzt säbare Zwischenfrucht ist ein Tab mit Kurzfassung (beste Folgefrucht, Ertrag, frühester Saatmonat, Wartezeit, ✓ bei „lohnt sich" / – sonst). Darunter steht für den gewählten Tab Saat → Gewachsen und eine Tabelle (Frucht, Ertrag, Säbar ab, Wartezeit) über die volle Breite.
+- Wartezeit als Text: „in 5 Monaten", ab 12 Monaten „in 1 Jahr 3 Monaten". Die Jahresangabe steht als Marke neben dem Monat, nicht in Klammern.
+- Beste Folgefrucht: höchster Ertrag, bei Gleichstand der frühere Monat. Voreingestellter Tab: der mit dem besten Ertrag (`top`). Die Auswahl wird je Feld gespeichert (`cptab`).
+- Direktvergleich rechnet ohne Zwischenfrucht aus dem Dropdown; Datenfeld heißt `growth` (nicht `growMonths`/`readyPeriods`).

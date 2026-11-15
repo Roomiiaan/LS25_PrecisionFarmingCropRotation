@@ -74,3 +74,11 @@ test('setActive: unbekannte ID wird ignoriert', () => {
   const s = Tabs.load(null, null);
   assert.equal(Tabs.setActive(s, 'gibt-es-nicht').active, s.active);
 });
+
+test('cptab (gewählter Zwischenfrucht-Tab) wird je Feld gespeichert', () => {
+  let s = Tabs.load(null, null);
+  s = Tabs.updateField(s, s.active, { cptab: 'MUSTARD' });
+  const again = Tabs.load(Tabs.serialize(s), null);
+  assert.equal(again.fields[0].cptab, 'MUSTARD');
+  assert.equal(Tabs.load(null, null).fields[0].cptab, '');
+});

@@ -92,11 +92,37 @@
       }).join('') + '</div>';
   }
 
-  // ---- Zwischenfrucht-Vergleich
+  // ---- Zwischenfrucht-Vergleich (Tabs je Zwischenfrucht, darunter Tabelle der Folgefrüchte)
   var cpPct = function (r) { return r.range ? Math.round(r.range.min * 100) + '–' + Math.round(r.range.max * 100) + ' %' : pct(r.factors.total); };
   // Jahresangabe als kleine Marke neben dem Monat (statt Klammern im Fließtext).
   var cpYear = function (n) { return n <= 0 ? '' : ' <i class="cp-tag">' + (n === 1 ? 'nächstes Jahr' : n === 2 ? 'übernächstes Jahr' : 'in ' + n + ' Jahren') + '</i>'; };
   var cpMonth = function (period, years) { return esc(Cal.periodLabel(period)) + cpYear(years); };
+  var cpTable = function (items) {
+    return '<table class="cp-table"><thead><tr><th>Frucht</th><th>Ertrag</th><th>Säbar ab</th><th>Wartezeit</th></tr></thead><tbody>' +
+      items.map(function (s) {
+        return '<tr><td>' + esc(s.row.crop.label) + '</td><td>' + cpPct(s.row) + '</td><td><b>' + cpMonth(s.sowPeriod, s.yearsAhead) + '</b></td><td>' + esc(Cal.formatWait(s.delayMonths)) + '</td></tr>';
+      }).join('') + '</tbody></table>';
+  };
+  function cpSelect(name) {
+    store = Tabs.updateField(store, store.active, { cptab: name });
+    state = activeField();
+    save();
+    render();
+    var t = document.querySelector('.cp-tab[aria-selected="true"]');
+    if (t) t.focus();
+  }
+  $('catch-plan').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('.cp-tab') : null;
+    if (b) cpSelect(b.getAttribute('data-cc'));
+  });
+  $('catch-plan').addEventListener('keydown', function (e) {
+    var dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.cp-tab'));
+    if (!dir || !tabs.length) return;
+    var i = tabs.findIndex(function (t) { return t.getAttribute('aria-selected') === 'true'; });
+    cpSelect(tabs[(i + dir + tabs.length) % tabs.length].getAttribute('data-cc'));
+    e.preventDefault();
+  });
   function renderCatchPlan(input) {
     var out = CatchPlan.buildCatchPlan(data, input);
     var month = Cal.periodLabel(input.period);
@@ -107,23 +133,29 @@
     var direct = out.direct
       ? 'Direkt säen im ' + esc(month) + ': beste Frucht ' + esc(out.direct.crop.label) + ' mit ' + cpPct(out.direct) + '.'
       : 'Direkt ist im ' + esc(month) + ' keine Hauptfrucht säbar.';
-    var item = function (s) {
-      return '<li><span>' + esc(s.row.crop.label) + ' ' + cpPct(s.row) + '</span><span>ab <b>' + cpMonth(s.sowPeriod, s.yearsAhead) + '</b> <em>+' + s.delayMonths + ' Mon.</em></span></li>';
-    };
-    $('catch-plan').innerHTML = '<p class="cp-direct">' + direct + '</p><div class="cp-grid">' + out.cards.map(function (c) {
-      var top = c.sowable.slice(0, 6), rest = c.sowable.slice(6);
-      var verdict;
-      if (c.verdict === 'none') verdict = '– Keine Hauptfrucht im Zeitraum säbar';
-      else if (c.verdict === 'better') verdict = '✓ Bester Wert: ' + esc(c.best.row.crop.label) + ' ' + cpPct(c.best.row) + (out.direct ? ' statt ' + cpPct(out.direct) + ' direkt' : '') + ', ' + c.best.delayMonths + ' Monate nach der Zwischenfrucht-Saat';
-      else verdict = '– Lohnt sich nicht: direkt säen bringt ' + cpPct(out.direct) + ' (' + esc(out.direct.crop.label) + '), mit Zwischenfrucht höchstens ' + cpPct(c.best.row) + ' (' + esc(c.best.row.crop.label) + ')';
-      return '<article class="cp-card' + (c.verdict === 'better' ? '' : ' worse') + '">' +
-        '<h3>' + esc(c.catchCrop.label) + '</h3>' +
-        '<div class="cp-ready"><span class="cp-step"><small>Saat</small><span>' + esc(Cal.periodLabel(c.sowPeriod)) + '</span></span><span class="cp-arrow" aria-hidden="true">→</span><span class="cp-step"><small>Gewachsen nach ' + c.readyAfter + ' Monaten</small><span>' + cpMonth(c.readyPeriod, c.readyYearsAhead) + '</span></span></div>' +
-        (top.length ? '<ul class="cp-list">' + top.map(item).join('') + '</ul>' : '') +
-        (rest.length ? '<details class="cp-more"><summary>weitere ' + rest.length + '</summary><ul class="cp-list">' + rest.map(item).join('') + '</ul></details>' : '') +
-        (c.blocked.length ? '<div class="cp-blocked">Im Zeitraum nicht säbar: ' + c.blocked.map(function (r) { return esc(r.crop.label); }).join(', ') + '</div>' : '') +
-        '<div class="cp-verdict">' + verdict + '</div></article>';
-    }).join('') + '</div>';
+    var wanted = state.cptab;
+    var sel = out.cards.filter(function (c) { return c.catchCrop.name === wanted; })[0]
+      || out.cards.filter(function (c) { return c.catchCrop.name === out.top; })[0] || out.cards[0];
+    var tabs = out.cards.map(function (c) {
+      var on = c === sel, b = c.best;
+      var mark = c.verdict === 'better' ? '<i class="cp-mark ok" title="lohnt sich">✓</i>' : '<i class="cp-mark no" title="lohnt sich nicht">–</i>';
+      var body = b
+        ? '<span class="cp-tab-best">' + esc(b.row.crop.label) + ' ' + cpPct(b.row) + '</span><span class="cp-tab-sub">ab ' + cpMonth(b.sowPeriod, b.yearsAhead) + ' · ' + esc(Cal.formatWait(b.delayMonths)) + '</span>'
+        : '<span class="cp-tab-best">keine Hauptfrucht säbar</span><span class="cp-tab-sub">&nbsp;</span>';
+      return '<button type="button" role="tab" class="cp-tab" id="cp-tab-' + esc(c.catchCrop.name) + '" data-cc="' + esc(c.catchCrop.name) + '" aria-selected="' + on + '" aria-controls="cp-panel" tabindex="' + (on ? 0 : -1) + '">' +
+        '<span class="cp-tab-name">' + esc(c.catchCrop.label) + ' ' + mark + '</span>' + body + '</button>';
+    }).join('');
+    var c = sel, top = c.sowable.slice(0, 8), rest = c.sowable.slice(8), verdict;
+    if (c.verdict === 'none') verdict = '– Keine Hauptfrucht im Zeitraum säbar';
+    else if (c.verdict === 'better') verdict = '✓ Bester Wert: ' + esc(c.best.row.crop.label) + ' ' + cpPct(c.best.row) + (out.direct ? ' statt ' + cpPct(out.direct) + ' direkt' : '') + ', ' + esc(Cal.formatWait(c.best.delayMonths));
+    else verdict = '– Lohnt sich nicht: direkt säen bringt ' + cpPct(out.direct) + ' (' + esc(out.direct.crop.label) + '), mit Zwischenfrucht höchstens ' + cpPct(c.best.row) + ' (' + esc(c.best.row.crop.label) + ')';
+    var panel = '<div class="cp-panel" id="cp-panel" role="tabpanel" aria-labelledby="cp-tab-' + esc(c.catchCrop.name) + '">' +
+      '<div class="cp-ready"><span class="cp-step"><small>Saat</small><span>' + esc(Cal.periodLabel(c.sowPeriod)) + '</span></span><span class="cp-arrow" aria-hidden="true">→</span><span class="cp-step"><small>Gewachsen nach ' + c.readyAfter + ' Monaten</small><span>' + cpMonth(c.readyPeriod, c.readyYearsAhead) + '</span></span></div>' +
+      (top.length ? cpTable(top) : '') +
+      (rest.length ? '<details class="cp-more"><summary>weitere ' + rest.length + '</summary>' + cpTable(rest) + '</details>' : '') +
+      (c.blocked.length ? '<div class="cp-blocked">Im Zeitraum nicht säbar: ' + c.blocked.map(function (r) { return esc(r.crop.label); }).join(', ') + '</div>' : '') +
+      '<div class="cp-verdict ' + (c.verdict === 'better' ? 'ok' : 'no') + '">' + verdict + '</div></div>';
+    $('catch-plan').innerHTML = '<p class="cp-direct">' + direct + '</p><div class="cp-tabs" role="tablist" aria-label="Zwischenfrüchte">' + tabs + '</div>' + panel;
   }
 
   // ---- Ausgabe

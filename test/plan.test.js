@@ -130,3 +130,14 @@ test('yearsAhead: Zahl der Jahreswechsel (Jan–Dez)', () => {
   assert.equal(cal.yearsAhead('EARLY_AUTUMN', 17), 2); // September + 17 Monate = Februar im übernächsten Jahr
   assert.equal(cal.yearsAhead('EARLY_AUTUMN', 10), 1);
 });
+
+test('formatWait: Wartezeit in Monaten und Jahren', () => {
+  assert.equal(cal.formatWait(0), 'sofort');
+  assert.equal(cal.formatWait(1), 'in 1 Monat');
+  assert.equal(cal.formatWait(5), 'in 5 Monaten');
+  assert.equal(cal.formatWait(12), 'in 1 Jahr');
+  assert.equal(cal.formatWait(15), 'in 1 Jahr 3 Monaten');
+  assert.equal(cal.formatWait(13), 'in 1 Jahr 1 Monat');
+  assert.equal(cal.formatWait(24), 'in 2 Jahren');
+  assert.equal(cal.formatWait(26), 'in 2 Jahren 2 Monaten');
+});
