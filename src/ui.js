@@ -58,7 +58,7 @@
   function renderTabs() {
     $('tablist').innerHTML = store.fields.map(function (f) {
       var sel = f.id === store.active;
-      return '<button type="button" role="tab" class="tab" data-id="' + esc(f.id) + '" aria-selected="' + sel + '" tabindex="' + (sel ? 0 : -1) + '" title="' + esc(f.name) + '">' + esc(f.name) + '</button>';
+      return '<button type="button" role="tab" class="tab" data-id="' + esc(f.id) + '" aria-selected="' + sel + '" draggable="true" tabindex="' + (sel ? 0 : -1) + '" title="' + esc(f.name) + '">' + esc(f.name) + '</button>';
     }).join('');
   }
 
@@ -238,8 +238,49 @@
     var dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
     if (!dir) return;
     var i = store.fields.findIndex(function (f) { return f.id === store.active; });
+    if (e.altKey) { // Alt + Pfeil: aktives Feld in der Reihenfolge verschieben
+      moveTab(store.active, i + dir);
+      e.preventDefault();
+      return;
+    }
     selectTab(store.fields[(i + dir + store.fields.length) % store.fields.length].id);
     e.preventDefault();
+  });
+  // Reihenfolge ändern: Ziehen mit der Maus oder Alt + Pfeiltaste.
+  function moveTab(id, toIndex) {
+    var next = Tabs.moveField(store, id, toIndex);
+    if (next === store) return;
+    commit(next);
+    var b = document.querySelector('.tab[data-id="' + id + '"]');
+    if (b) b.focus();
+  }
+  var dragId = null;
+  $('tablist').addEventListener('dragstart', function (e) {
+    var b = e.target.closest ? e.target.closest('.tab') : null;
+    if (!b) return;
+    dragId = b.getAttribute('data-id');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', dragId);
+    b.classList.add('dragging');
+  });
+  $('tablist').addEventListener('dragover', function (e) {
+    if (!dragId) return;
+    e.preventDefault();
+    var over = e.target.closest ? e.target.closest('.tab') : null;
+    Array.prototype.forEach.call(document.querySelectorAll('.tab.drop'), function (t) { t.classList.remove('drop'); });
+    if (over && over.getAttribute('data-id') !== dragId) over.classList.add('drop');
+  });
+  $('tablist').addEventListener('drop', function (e) {
+    if (!dragId) return;
+    e.preventDefault();
+    var over = e.target.closest ? e.target.closest('.tab') : null;
+    var id = dragId;
+    dragId = null;
+    if (over) moveTab(id, store.fields.findIndex(function (f) { return f.id === over.getAttribute('data-id'); }));
+  });
+  $('tablist').addEventListener('dragend', function () {
+    dragId = null;
+    Array.prototype.forEach.call(document.querySelectorAll('.tab.dragging, .tab.drop'), function (t) { t.classList.remove('dragging', 'drop'); });
   });
   $('tab-add').addEventListener('click', function () { commit(Tabs.addField(store)); });
   $('tab-rename').addEventListener('click', function () {

@@ -82,3 +82,32 @@ test('cptab (gewählter Zwischenfrucht-Tab) wird je Feld gespeichert', () => {
   assert.equal(again.fields[0].cptab, 'MUSTARD');
   assert.equal(Tabs.load(null, null).fields[0].cptab, '');
 });
+
+test('moveField: verschiebt ein Feld an eine neue Position, aktives Feld bleibt', () => {
+  let s = Tabs.load(null, null);
+  s = Tabs.addField(s);
+  s = Tabs.addField(s);
+  const [a, b, c] = s.fields.map((f) => f.id);
+  s = Tabs.setActive(s, b);
+  const m = Tabs.moveField(s, a, 2);
+  assert.deepEqual(m.fields.map((f) => f.id), [b, c, a]);
+  assert.equal(m.active, b);
+  assert.deepEqual(Tabs.moveField(s, c, 0).fields.map((f) => f.id), [c, a, b]);
+});
+
+test('moveField: ungültige ID oder Position ändert nichts, Zielposition wird begrenzt', () => {
+  let s = Tabs.load(null, null);
+  s = Tabs.addField(s);
+  const ids = s.fields.map((f) => f.id);
+  assert.equal(Tabs.moveField(s, 'gibt-es-nicht', 0), s);
+  assert.equal(Tabs.moveField(s, ids[0], 0), s);
+  assert.deepEqual(Tabs.moveField(s, ids[0], 99).fields.map((f) => f.id), [ids[1], ids[0]]);
+  assert.deepEqual(Tabs.moveField(s, ids[1], -5).fields.map((f) => f.id), [ids[1], ids[0]]);
+});
+
+test('moveField: neue Reihenfolge übersteht Speichern und Laden', () => {
+  let s = Tabs.addField(Tabs.load(null, null));
+  const ids = s.fields.map((f) => f.id);
+  s = Tabs.moveField(s, ids[0], 1);
+  assert.deepEqual(Tabs.load(Tabs.serialize(s), null).fields.map((f) => f.id), [ids[1], ids[0]]);
+});

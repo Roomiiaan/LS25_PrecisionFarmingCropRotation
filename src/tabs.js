@@ -70,7 +70,18 @@
 
   const setActive = (state, id) => (state.fields.some((f) => f.id === id) ? Object.assign({}, state, { active: id }) : state);
 
-  const api = { load, serialize, addField, updateField, renameField, removeField, setActive };
+  // Feld an die Position toIndex setzen (wird auf 0..Anzahl-1 begrenzt); aktives Feld bleibt.
+  function moveField(state, id, toIndex) {
+    const from = state.fields.findIndex((f) => f.id === id);
+    if (from < 0) return state;
+    const to = Math.max(0, Math.min(state.fields.length - 1, toIndex));
+    if (to === from) return state;
+    const fields = state.fields.slice();
+    fields.splice(to, 0, fields.splice(from, 1)[0]);
+    return Object.assign({}, state, { fields });
+  }
+
+  const api = { load, serialize, addField, updateField, renameField, removeField, setActive, moveField };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Tabs = api;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -15,6 +15,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:15p
 .tablist{display:flex;gap:6px;flex-wrap:wrap}
 .tab{min-height:44px;padding:0 18px;border:1px solid var(--line);border-bottom:3px solid transparent;border-radius:10px 10px 0 0;background:var(--noBg);color:var(--mut);font:inherit;font-weight:600;cursor:pointer;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tab:hover{color:var(--ink)}
+.tab.dragging{opacity:.4}
+.tab.drop{box-shadow:inset 3px 0 0 var(--pri)}
 .tab[aria-selected="true"]{background:var(--card);color:var(--ink);border-bottom-color:var(--pri)}
 .tabactions{display:flex;gap:8px;flex-wrap:wrap}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
