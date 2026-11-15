@@ -68,3 +68,21 @@ test('Extraktor scheitert laut, wenn die Mods fehlen (keine stille Teilausgabe)'
   });
   assert.notEqual(r.status, 0);
 });
+
+const Cal = require('../src/calendar.js');
+const cc = (n) => data.catchCrops.find((c) => c.name === n);
+
+test('Zwischenfrüchte: Saatfenster aus den Map-Dateien (vom Nutzer bestätigt)', () => {
+  assert.equal(Cal.formatWindow(cc('OILSEEDRADISH').plantingPeriods), 'Mär–Okt');
+  assert.equal(Cal.formatWindow(cc('MUSTARD').plantingPeriods), 'Mär–Okt');
+  assert.equal(Cal.formatWindow(cc('HUMUSACTIVE').plantingPeriods), 'Mär–Okt');
+  assert.equal(Cal.formatWindow(cc('FLOWERINGCATCHCROP').plantingPeriods), 'Mär–Sep');
+});
+
+test('Zwischenfrüchte: Wachstum (Updates wirken am Periodenende)', () => {
+  assert.deepEqual(cc('OILSEEDRADISH').growth.MID_SPRING, { readyAfter: 2, readyFor: null });
+  assert.deepEqual(cc('MUSTARD').growth.MID_SPRING, { readyAfter: 3, readyFor: 5 });
+  assert.equal(cc('MUSTARD').growth.EARLY_SPRING.readyAfter, 4); // im frühen Frühling fehlt ein Update
+  assert.equal(cc('HUMUSACTIVE').growth.MID_SPRING.readyAfter, 3);
+  assert.ok(cc('HUMUSACTIVE').growth.MID_SPRING.readyFor >= 5);
+});

@@ -2108,7 +2108,51 @@
     "BEANS",
     "LENTILS",
     "GREENBEAN"
-   ]
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN"
+   ],
+   "growth": {
+    "EARLY_SPRING": {
+     "readyAfter": 2,
+     "readyFor": null
+    },
+    "MID_SPRING": {
+     "readyAfter": 2,
+     "readyFor": null
+    },
+    "LATE_SPRING": {
+     "readyAfter": 2,
+     "readyFor": null
+    },
+    "EARLY_SUMMER": {
+     "readyAfter": 2,
+     "readyFor": null
+    },
+    "MID_SUMMER": {
+     "readyAfter": 2,
+     "readyFor": null
+    },
+    "LATE_SUMMER": {
+     "readyAfter": 2,
+     "readyFor": null
+    },
+    "EARLY_AUTUMN": {
+     "readyAfter": 2,
+     "readyFor": null
+    },
+    "MID_AUTUMN": {
+     "readyAfter": 5,
+     "readyFor": null
+    }
+   }
   },
   {
    "name": "HUMUSACTIVE",
@@ -2142,7 +2186,51 @@
     "GREENBEAN",
     "SUNFLOWER",
     "POTATO"
-   ]
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN"
+   ],
+   "growth": {
+    "EARLY_SPRING": {
+     "readyAfter": 4,
+     "readyFor": 8
+    },
+    "MID_SPRING": {
+     "readyAfter": 3,
+     "readyFor": 8
+    },
+    "LATE_SPRING": {
+     "readyAfter": 3,
+     "readyFor": 7
+    },
+    "EARLY_SUMMER": {
+     "readyAfter": 3,
+     "readyFor": 6
+    },
+    "MID_SUMMER": {
+     "readyAfter": 3,
+     "readyFor": 5
+    },
+    "LATE_SUMMER": {
+     "readyAfter": 3,
+     "readyFor": 4
+    },
+    "EARLY_AUTUMN": {
+     "readyAfter": 4,
+     "readyFor": 2
+    },
+    "MID_AUTUMN": {
+     "readyAfter": 3,
+     "readyFor": 2
+    }
+   }
   },
   {
    "name": "MUSTARD",
@@ -2175,7 +2263,51 @@
     "CANOLA",
     "SUNFLOWER",
     "POTATO"
-   ]
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN",
+    "MID_AUTUMN"
+   ],
+   "growth": {
+    "EARLY_SPRING": {
+     "readyAfter": 4,
+     "readyFor": 5
+    },
+    "MID_SPRING": {
+     "readyAfter": 3,
+     "readyFor": 5
+    },
+    "LATE_SPRING": {
+     "readyAfter": 3,
+     "readyFor": 4
+    },
+    "EARLY_SUMMER": {
+     "readyAfter": 3,
+     "readyFor": 3
+    },
+    "MID_SUMMER": {
+     "readyAfter": 3,
+     "readyFor": 2
+    },
+    "LATE_SUMMER": {
+     "readyAfter": 3,
+     "readyFor": 1
+    },
+    "EARLY_AUTUMN": {
+     "readyAfter": 10,
+     "readyFor": 5
+    },
+    "MID_AUTUMN": {
+     "readyAfter": 9,
+     "readyFor": 5
+    }
+   }
   },
   {
    "name": "FLOWERINGCATCHCROP",
@@ -2209,7 +2341,46 @@
     "GREENBEAN",
     "SUNFLOWER",
     "POTATO"
-   ]
+   ],
+   "plantingPeriods": [
+    "EARLY_SPRING",
+    "MID_SPRING",
+    "LATE_SPRING",
+    "EARLY_SUMMER",
+    "MID_SUMMER",
+    "LATE_SUMMER",
+    "EARLY_AUTUMN"
+   ],
+   "growth": {
+    "EARLY_SPRING": {
+     "readyAfter": 4,
+     "readyFor": 8
+    },
+    "MID_SPRING": {
+     "readyAfter": 3,
+     "readyFor": 8
+    },
+    "LATE_SPRING": {
+     "readyAfter": 3,
+     "readyFor": 7
+    },
+    "EARLY_SUMMER": {
+     "readyAfter": 3,
+     "readyFor": 6
+    },
+    "MID_SUMMER": {
+     "readyAfter": 3,
+     "readyFor": 5
+    },
+    "LATE_SUMMER": {
+     "readyAfter": 3,
+     "readyFor": 4
+    },
+    "EARLY_AUTUMN": {
+     "readyAfter": 10,
+     "readyFor": 8
+    }
+   }
   }
  ],
  "pf": {

@@ -59,23 +59,42 @@ function foliage(xml) {
   // Spiel): Die Updates einer Periode wirken an ihrem Ende, pro Periode rückt eine Pflanze genau eine Stufe vor.
   // Erntereif ist eine Periode, wenn die Pflanze bei ihrem Beginn in einem reifen Zustand steht. Das Erntefenster
   // ist die Vereinigung über alle Saatperioden; eine Pflanze endet, sobald sie nach der Reife den reifen Zustand verlässt.
-  const harvest = new Set();
   const usesInvisible = periods.some((p) => p.updates.some((u) => u.startState === 'invisible'));
-  periods.forEach((sow, s) => {
-    if (!sow.planting) return;
+  // Liefert die Perioden ab der Saat als [{ k, period, ready }]; endet nach der Reife beim ersten nicht reifen Zustand
+  // (dann steps.ended = true), sonst nach 24 Perioden.
+  function follow(sowIndex) {
+    const sow = periods[sowIndex];
     // Frisch gesäte Pflanzen starten in 'invisible'; Früchte ohne diesen Zustand (Reis) starten mit dem ersten Update der Saatperiode.
     let state = usesInvisible ? 'invisible' : (sow.updates[0] || {}).startState;
+    const steps = [];
+    steps.ended = false;
     let wasReady = false;
     for (let k = 0; k < periods.length * 2; k++) {
-      const p = periods[(s + k) % periods.length];
-      if (ready.has(state)) { harvest.add(p.name); wasReady = true; } else if (wasReady) break;
+      const p = periods[(sowIndex + k) % periods.length];
+      const isReady = ready.has(state);
+      if (!isReady && wasReady) { steps.ended = true; break; }
+      wasReady = wasReady || isReady;
+      steps.push({ k, period: p.name, ready: isReady });
       const u = p.updates.find((x) => x.startState === state);
       if (u) state = u.endState;
+    }
+    return steps;
+  }
+  const harvest = new Set();
+  // growth: je Saatperiode, nach wie vielen Perioden die Pflanze reif ist (readyAfter) und wie viele Perioden lang (readyFor; null = bleibt reif).
+  const growth = {};
+  periods.forEach((sow, s) => {
+    if (!sow.planting) return;
+    const steps = follow(s);
+    const readySteps = steps.filter((x) => x.ready);
+    readySteps.forEach((x) => harvest.add(x.period));
+    if (readySteps.length) {
+      growth[sow.name] = { readyAfter: readySteps[0].k, readyFor: steps.ended ? readySteps.length : null };
     }
   });
   const liters = (xml.match(/<harvest\b[^>]*litersPerSqm="([\d.]+)"/) || [])[1];
   const name = (xml.match(/<fruitType\s+name="(\w+)"/) || [])[1];
-  return { name: name && name.toUpperCase(), planting, harvest: periods.map((p) => p.name).filter((n) => harvest.has(n)), litersPerSqm: liters ? Number(liters) : 0 };
+  return { name: name && name.toUpperCase(), planting, growth, harvest: periods.map((p) => p.name).filter((n) => harvest.has(n)), litersPerSqm: liters ? Number(liters) : 0 };
 }
 
 function main() {
@@ -139,6 +158,8 @@ function main() {
     veryGoodCrops: list(c.veryGoodCrops),
     goodCrops: list(c.goodCrops),
     badCrops: list(c.badCrops),
+    plantingPeriods: fol[c.fruitName] ? fol[c.fruitName].planting : [],
+    growth: fol[c.fruitName] ? fol[c.fruitName].growth : {},
   }));
 
   // --- Precision Farming
