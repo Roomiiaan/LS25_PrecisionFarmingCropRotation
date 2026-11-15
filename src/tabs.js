@@ -1,13 +1,13 @@
-// Feld-Tabs: unveränderlicher Zustand {fields:[{id,name,prev,last,month,catch,soil,ph,nitrogen}], active:id}.
+// Feld-Tabs: unveränderlicher Zustand {fields:[{id,name,prev,last,month,catch,soil,ph,nitrogen,cptab}], active:id}.
 // Keine DOM-Abhängigkeit; Speichern/Laden bekommt Strings, damit es testbar bleibt.
 (function (root) {
-  const FIELD_KEYS = ['prev', 'last', 'month', 'catch', 'soil', 'ph', 'nitrogen'];
+  const FIELD_KEYS = ['prev', 'last', 'month', 'catch', 'soil', 'ph', 'nitrogen', 'cptab'];
 
   const newId = () => 'f' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
   function makeField(name, values) {
     return Object.assign(
-      { id: newId(), name, prev: '', last: '', month: 'MID_AUTUMN', catch: '', soil: '', ph: '', nitrogen: '' },
+      { id: newId(), name, prev: '', last: '', month: 'MID_AUTUMN', catch: '', soil: '', ph: '', nitrogen: '', cptab: '' },
       values || {},
     );
   }

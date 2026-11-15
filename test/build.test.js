@@ -66,3 +66,9 @@ test('Bodenart ist eine optionale Mehrfachauswahl (Schalter-Gruppe)', () => {
   assert.ok(html.includes('mehrere möglich'));
   assert.ok(html.includes('.chip-soil'));
 });
+
+test('Seite enthält den Abschnitt „Mit Zwischenfrucht" und das Modul catchplan', () => {
+  assert.ok(html.includes('id="catch-plan"'));
+  assert.ok(html.includes('Mit Zwischenfrucht'));
+  assert.ok(html.includes('buildCatchPlan'));
+});

@@ -105,3 +105,11 @@ Ursachen in `scripts/extract.js` (beide behoben):
 2. Es wurde ein gemeinsamer Zustand für alle Pflanzen geführt. Richtig ist: je Saatperiode eine Pflanze von der Aussaat an verfolgen (pro Periode eine Stufe), das Erntefenster ist die Vereinigung. Sonst zählen Updates für Pflanzen, die es im Jahr noch gar nicht geben kann (Rote Bete ab April).
 
 Ergebnis: 9 von 9 Früchten stimmen in Saat und Ernte. Betroffen waren fast alle Erntefenster (z. B. Weizen, Mais, Kartoffeln, Zuckerrüben); Gras, Wiese, Luzerne und Klee haben jetzt ebenfalls Erntefenster (Apr–Nov), diese sind **nicht** gegen das Spiel geprüft.
+
+## Teil 4: Zwischenfrüchte (Saat, Wachstum, Vergleich) – Reifemonate OFFEN
+
+- **Bonus beim Säen:** In `FSDensityMapUtilExtension.lua` setzt `updateCropRotationForSowingArea` den Zwischenfrucht-Zustand beim **Säen** der Zwischenfrucht. Das Wachstum spielt für die Fruchtfolge-Berechnung keine Rolle; letzte/vorletzte Frucht ändern sich nicht, die Brache wird zurückgesetzt. Beim Ernten der Hauptfrucht wird der Zustand gelesen und zurückgesetzt.
+- **Saatmonate** (Nutzer bestätigt): Ölrettich, Senf, Humusaktiv März–Oktober, Blühende Zwischenfrucht März–Oktober ohne Oktober (März–September).
+- **Wachstum:** wie bei den Erntefenstern (Updates am Periodenende). Ölrettich: 2 Monate bis `harvestReady` (im Winter stockt es: im Oktober gesät erst nach 5 Monaten), bleibt reif. Senf, Humusaktiv, Blühende Zwischenfrucht: meist 3 Monate; Senf verdorrt später. Die Werte stehen je Saatperiode in `data.json` (`catchCrops[].growth`).
+- **Beobachtung im Spiel:** Ölrettich zeigt „Wachstum 2/3". Das passt: drei Stufen (unsichtbar, klein, reif), 2/3 ist die kleine Pflanze. Die **Reifemonate** sind damit noch nicht belegt.
+- **Offen:** Saatmonat und aktuellen Monat notieren, dann prüfen, wann „3/3" erreicht ist (Ölrettich: 2 Monate nach der Saat). Danach als Test unter `Spielwerte` aufnehmen.

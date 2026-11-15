@@ -47,7 +47,23 @@
     return r.map((run) => (run.length === 1 ? periodShort(run[0]) : `${periodShort(run[0])}–${periodShort(run[run.length - 1])}`)).join(', ');
   }
 
-  const api = { PERIODS, MONTH_ORDER, periodLabel, periodShort, isPlantable, firstHarvestPeriod, formatWindow };
+  // Die Periode k Monate später (zyklisch, k >= 0).
+  const shiftPeriod = (period, k) => PERIODS[(idx(period) + k) % PERIODS.length];
+  // Liegt die um k verschobene Periode im folgenden Kalenderjahr (Januar bis Dezember)?
+  // Anzahl der Jahreswechsel (Januar bis Dezember) bis zur um k verschobenen Periode: 0 = gleiches Jahr, 1 = nächstes Jahr, ...
+  const yearsAhead = (period, k) => Math.floor((MONTH_ORDER.indexOf(period) + k) / PERIODS.length);
+  const wrapsYear = (period, k) => yearsAhead(period, k) > 0;
+
+  // Wartezeit in Monaten als Text: 'in 5 Monaten', 'in 1 Jahr 3 Monaten'.
+  function formatWait(k) {
+    if (k <= 0) return 'sofort';
+    const y = Math.floor(k / 12), m = k % 12;
+    const years = y === 1 ? '1 Jahr' : y + ' Jahren';
+    const months = m === 1 ? '1 Monat' : m + ' Monaten';
+    return 'in ' + (y ? years + (m ? ' ' + months : '') : months);
+  }
+
+  const api = { PERIODS, MONTH_ORDER, periodLabel, periodShort, isPlantable, firstHarvestPeriod, formatWindow, shiftPeriod, wrapsYear, yearsAhead, formatWait };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Calendar = api;
 })(typeof window !== 'undefined' ? window : globalThis);
