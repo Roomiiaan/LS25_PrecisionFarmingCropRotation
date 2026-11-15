@@ -118,7 +118,7 @@
       else verdict = '– Lohnt sich nicht: direkt säen bringt ' + cpPct(out.direct) + ' (' + esc(out.direct.crop.label) + '), mit Zwischenfrucht höchstens ' + cpPct(c.best.row) + ' (' + esc(c.best.row.crop.label) + ')';
       return '<article class="cp-card' + (c.verdict === 'better' ? '' : ' worse') + '">' +
         '<h3>' + esc(c.catchCrop.label) + '</h3>' +
-        '<div class="cp-ready"><span class="cp-step"><small>Saat</small>' + esc(Cal.periodLabel(c.sowPeriod)) + '</span><span class="cp-arrow" aria-hidden="true">→</span><span class="cp-step"><small>Gewachsen nach ' + c.readyAfter + ' Monaten</small>' + cpMonth(c.readyPeriod, c.readyYearsAhead) + '</span></div>' +
+        '<div class="cp-ready"><span class="cp-step"><small>Saat</small><span>' + esc(Cal.periodLabel(c.sowPeriod)) + '</span></span><span class="cp-arrow" aria-hidden="true">→</span><span class="cp-step"><small>Gewachsen nach ' + c.readyAfter + ' Monaten</small><span>' + cpMonth(c.readyPeriod, c.readyYearsAhead) + '</span></span></div>' +
         (top.length ? '<ul class="cp-list">' + top.map(item).join('') + '</ul>' : '') +
         (rest.length ? '<details class="cp-more"><summary>weitere ' + rest.length + '</summary><ul class="cp-list">' + rest.map(item).join('') + '</ul></details>' : '') +
         (c.blocked.length ? '<div class="cp-blocked">Im Zeitraum nicht säbar: ' + c.blocked.map(function (r) { return esc(r.crop.label); }).join(', ') + '</div>' : '') +
