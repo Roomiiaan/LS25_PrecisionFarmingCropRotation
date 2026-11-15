@@ -109,3 +109,17 @@ test('Sortierung nach Mittelwert, säbare zuerst, auch bei Spanne', () => {
   const yes = firstNo < 0 ? rows : rows.slice(0, firstNo);
   for (let i = 1; i < yes.length; i++) assert.ok(yes[i - 1].factors.total >= yes[i].factors.total);
 });
+
+test('shiftPeriod: Monate später, zyklisch', () => {
+  assert.equal(cal.shiftPeriod('MID_SPRING', 3), 'MID_SUMMER');
+  assert.equal(cal.shiftPeriod('MID_AUTUMN', 2), 'EARLY_WINTER');
+  assert.equal(cal.shiftPeriod('MID_AUTUMN', 5), 'EARLY_SPRING');
+  assert.equal(cal.shiftPeriod('LATE_WINTER', 0), 'LATE_WINTER');
+});
+
+test('wrapsYear: Verschiebung ins nächste Kalenderjahr (Jan–Dez)', () => {
+  assert.equal(cal.wrapsYear('MID_SPRING', 3), false);   // April + 3 = Juli
+  assert.equal(cal.wrapsYear('MID_AUTUMN', 2), false);   // Oktober + 2 = Dezember
+  assert.equal(cal.wrapsYear('MID_AUTUMN', 5), true);    // Oktober + 5 = März
+  assert.equal(cal.wrapsYear('EARLY_SPRING', 12), true);
+});

@@ -47,7 +47,12 @@
     return r.map((run) => (run.length === 1 ? periodShort(run[0]) : `${periodShort(run[0])}–${periodShort(run[run.length - 1])}`)).join(', ');
   }
 
-  const api = { PERIODS, MONTH_ORDER, periodLabel, periodShort, isPlantable, firstHarvestPeriod, formatWindow };
+  // Die Periode k Monate später (zyklisch, k >= 0).
+  const shiftPeriod = (period, k) => PERIODS[(idx(period) + k) % PERIODS.length];
+  // Liegt die um k verschobene Periode im folgenden Kalenderjahr (Januar bis Dezember)?
+  const wrapsYear = (period, k) => k >= PERIODS.length || MONTH_ORDER.indexOf(shiftPeriod(period, k)) < MONTH_ORDER.indexOf(period);
+
+  const api = { PERIODS, MONTH_ORDER, periodLabel, periodShort, isPlantable, firstHarvestPeriod, formatWindow, shiftPeriod, wrapsYear };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Calendar = api;
 })(typeof window !== 'undefined' ? window : globalThis);
