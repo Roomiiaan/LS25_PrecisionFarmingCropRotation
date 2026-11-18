@@ -111,3 +111,18 @@ test('moveField: neue Reihenfolge übersteht Speichern und Laden', () => {
   s = Tabs.moveField(s, ids[0], 1);
   assert.deepEqual(Tabs.load(Tabs.serialize(s), null).fields.map((f) => f.id), [ids[1], ids[0]]);
 });
+
+test('load: bisheriges gemeinsames pH/N wandert in die Werte jeder gewählten Bodenart', () => {
+  const raw = JSON.stringify({ fields: [{ id: 'a', name: 'Nord', soil: '1,3', ph: '6.5', nitrogen: '120' }], active: 'a' });
+  const f = Tabs.load(raw, null).fields[0];
+  assert.deepEqual(JSON.parse(f.soilData), { 1: { share: '', ph: '6.5', nitrogen: '120' }, 3: { share: '', ph: '6.5', nitrogen: '120' } });
+  assert.equal(f.ph, undefined);
+  // schon migrierter Stand bleibt unangetastet
+  const again = Tabs.load(Tabs.serialize({ fields: [f], active: 'a' }), null).fields[0];
+  assert.equal(again.soilData, f.soilData);
+});
+
+test('load: altes v1 mit pH/N und Bodenart wird ebenfalls migriert', () => {
+  const f = Tabs.load(null, JSON.stringify({ soil: '2', ph: '6', nitrogen: '90' })).fields[0];
+  assert.deepEqual(JSON.parse(f.soilData), { 2: { share: '', ph: '6', nitrogen: '90' } });
+});

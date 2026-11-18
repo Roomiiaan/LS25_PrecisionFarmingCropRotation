@@ -4,42 +4,66 @@
   const Calc = isNode ? require('./calc.js') : root.Calc;
   const Cal = isNode ? require('./calendar.js') : root.Calendar;
 
-  const mean = (xs) => xs.reduce((a, b) => a + b, 0) / xs.length;
+  const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
 
-  // input: { last, prev, catchCrop, period, soilIndexes: number[] (optional), soilIndex (alt. einzeln), nitrogen, ph }
-  // 0 Bodenarten = nur Fruchtfolge, 1 = Einzelwert, 2+ = Spanne (range) mit Mittelwert als Gesamtwert.
-  function buildPlan(data, input) {
-    const soils = input.soilIndexes && input.soilIndexes.length ? input.soilIndexes
+  // Gewichte der Bodenarten aus den Flächenanteilen (in %), Summe = 1.
+  // Ohne Anteile: gleich verteilt. Fehlt nur bei einigen der Anteil, teilen sie sich den Rest bis 100 %.
+  // Summiert sich alles nicht auf 100, wird proportional umgerechnet.
+  function soilWeights(soils) {
+    const given = soils.map((s) => (isNum(s.share) && s.share > 0 ? s.share : null));
+    const sum = given.reduce((a, b) => a + (b || 0), 0);
+    const missing = given.filter((g) => g === null).length;
+    let raw = given;
+    if (sum > 0 && missing > 0) {
+      const each = Math.max(0, 100 - sum) / missing;
+      raw = given.map((g) => (g === null ? each : g));
+    } else if (sum === 0) {
+      raw = given.map(() => 1);
+    }
+    const total = raw.reduce((a, b) => a + b, 0);
+    return total > 0 ? raw.map((r) => r / total) : raw.map(() => 1 / raw.length);
+  }
+
+  // Neue Eingabeform: soils = [{ index, share, ph, nitrogen }]. Alt (weiter unterstützt):
+  // soilIndexes / soilIndex mit gemeinsamem nitrogen und ph.
+  function normalizeSoils(input) {
+    if (Array.isArray(input.soils)) return input.soils;
+    const idx = input.soilIndexes && input.soilIndexes.length ? input.soilIndexes
       : (input.soilIndex ? [input.soilIndex] : []);
+    return idx.map((index) => ({ index, share: null, ph: input.ph, nitrogen: input.nitrogen }));
+  }
+
+  // input: { last, prev, catchCrop, period, soils }
+  // 0 Bodenarten = nur Fruchtfolge; sonst wird der Ertrag je Bodenart mit deren pH/N gerechnet
+  // und nach Flächenanteil zum Gesamtwert gewichtet.
+  function buildPlan(data, input) {
+    const soils = normalizeSoils(input);
+    const weights = soils.length ? soilWeights(soils) : [1];
     const rows = data.crops
       .filter((c) => c.onMap && !c.ignoreInPlanner)
       .map((crop) => {
-        const perSoil = (soils.length ? soils : [null]).map((soilIndex) => ({
-          soilIndex,
+        const perSoil = (soils.length ? soils : [{ index: null }]).map((s, i) => ({
+          soilIndex: s.index,
+          weight: weights[i],
           factors: Calc.totalFactor(data, {
             cropName: crop.name, last: input.last, prev: input.prev, catchCrop: input.catchCrop,
-            soilIndex, nitrogen: input.nitrogen, ph: input.ph,
+            soilIndex: s.index, nitrogen: isNum(s.nitrogen) ? s.nitrogen : null, ph: isNum(s.ph) ? s.ph : null,
           }),
         }));
+        const wmean = (key) => perSoil.reduce((a, p) => a + p.weight * p.factors[key], 0);
         let factors = perSoil[0].factors;
-        let range = null;
         if (perSoil.length > 1) {
-          const totals = perSoil.map((p) => p.factors.total);
-          const total = mean(totals);
-          const liters = crop.litersPerSqm > 0 ? (t) => crop.litersPerSqm * 10000 * t : () => null;
+          const total = wmean('total');
           factors = Object.assign({}, factors, {
-            soil: mean(perSoil.map((p) => p.factors.soil)),
-            nitrogen: mean(perSoil.map((p) => p.factors.nitrogen)),
-            ph: mean(perSoil.map((p) => p.factors.ph)),
-            total, litersPerHa: liters(total),
+            soil: wmean('soil'), nitrogen: wmean('nitrogen'), ph: wmean('ph'), total,
+            litersPerHa: crop.litersPerSqm > 0 ? crop.litersPerSqm * 10000 * total : null,
+            nitrogenKnown: perSoil.some((p) => p.factors.nitrogenKnown),
           });
-          range = { min: Math.min(...totals), max: Math.max(...totals), litersMin: liters(Math.min(...totals)), litersMax: liters(Math.max(...totals)) };
         }
         return {
           crop,
           plantable: Cal.isPlantable(crop, input.period),
           factors,
-          range,
           perSoil,
           plantingLabel: Cal.formatWindow(crop.plantingPeriods),
           harvestLabel: Cal.formatWindow(crop.harvestPeriods),
@@ -62,7 +86,7 @@
     return 'bad';
   }
 
-  const api = { buildPlan, yieldLevel };
+  const api = { buildPlan, yieldLevel, soilWeights };
   if (isNode) module.exports = api;
   else root.Plan = api;
 })(typeof window !== 'undefined' ? window : globalThis);

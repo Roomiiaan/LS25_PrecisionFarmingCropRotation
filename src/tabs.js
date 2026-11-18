@@ -1,13 +1,13 @@
-// Feld-Tabs: unveränderlicher Zustand {fields:[{id,name,prev,last,month,catch,soil,ph,nitrogen,cptab}], active:id}.
+// Feld-Tabs: unveränderlicher Zustand {fields:[{id,name,prev,last,month,catch,soil,soilData,cptab}; soilData = JSON {"<Bodenart>":{share,ph,nitrogen}}], active:id}.
 // Keine DOM-Abhängigkeit; Speichern/Laden bekommt Strings, damit es testbar bleibt.
 (function (root) {
-  const FIELD_KEYS = ['prev', 'last', 'month', 'catch', 'soil', 'ph', 'nitrogen', 'cptab'];
+  const FIELD_KEYS = ['prev', 'last', 'month', 'catch', 'soil', 'soilData', 'cptab'];
 
   const newId = () => 'f' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
   function makeField(name, values) {
     return Object.assign(
-      { id: newId(), name, prev: '', last: '', month: 'MID_AUTUMN', catch: '', soil: '', ph: '', nitrogen: '', cptab: '' },
+      { id: newId(), name, prev: '', last: '', month: 'MID_AUTUMN', catch: '', soil: '', soilData: '', cptab: '' },
       values || {},
     );
   }
@@ -16,6 +16,14 @@
     let n = fields.length + 1;
     while (fields.some((f) => f.name === 'Feld ' + n)) n++;
     return 'Feld ' + n;
+  }
+
+  // Früher gab es ein gemeinsames pH/N je Feld: in die Werte jeder gewählten Bodenart übernehmen.
+  function migrate(f) {
+    if (!f || typeof f.soilData === 'string' || (!f.ph && !f.nitrogen) || !f.soil) return f;
+    const data = {};
+    String(f.soil).split(',').filter(Boolean).forEach((i) => { data[i] = { share: '', ph: f.ph || '', nitrogen: f.nitrogen || '' }; });
+    return Object.assign({}, f, { soilData: JSON.stringify(data) });
   }
 
   const pick = (o) => FIELD_KEYS.reduce((acc, k) => (typeof o[k] === 'string' ? Object.assign(acc, { [k]: o[k] }) : acc), {});
@@ -34,13 +42,13 @@
     const s = parse(raw);
     if (s && Array.isArray(s.fields) && s.fields.length) {
       const fields = s.fields.filter((f) => f && typeof f.id === 'string').map((f) =>
-        Object.assign(makeField(typeof f.name === 'string' && f.name.trim() ? f.name : 'Feld', pick(f)), { id: f.id }));
+        Object.assign(makeField(typeof f.name === 'string' && f.name.trim() ? f.name : 'Feld', pick(migrate(f))), { id: f.id }));
       if (fields.length) {
         return { fields, active: fields.some((f) => f.id === s.active) ? s.active : fields[0].id };
       }
     }
     const legacy = parse(legacyRaw);
-    return fresh(legacy && typeof legacy === 'object' ? pick(legacy) : undefined);
+    return fresh(legacy && typeof legacy === 'object' ? pick(migrate(legacy)) : undefined);
   }
 
   const serialize = (state) => JSON.stringify(state);

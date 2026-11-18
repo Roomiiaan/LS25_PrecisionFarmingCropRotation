@@ -40,7 +40,7 @@
   function refreshCombos() { combos.forEach(function (c) { c.refresh(); }); }
 
   // ---- Zustand (Feld-Tabs)
-  var KEYS = ['prev', 'last', 'month', 'catch', 'ph', 'nitrogen'];
+  var KEYS = ['prev', 'last', 'month', 'catch'];
   // Bodenarten: optionale Mehrfachauswahl, gespeichert als "1,3" (leer = keine Angabe).
   function soilList(s) { return s ? s.split(',').map(Number).filter(function (n) { return isFinite(n) && n > 0; }) : []; }
   function renderSoil() {
@@ -48,6 +48,35 @@
     $('soil').innerHTML = data.pf.soilTypes.map(function (s) {
       return '<button type="button" class="chip-soil" data-soil="' + s.index + '" aria-pressed="' + (sel.indexOf(s.index) >= 0) + '">' + esc(s.name) + '</button>';
     }).join('');
+  }
+  // Je Bodenart eigene Werte (Anteil, pH, Stickstoff): gespeichert als JSON { "<Bodenart>": { share, ph, nitrogen } }.
+  function soilData(s) { try { var d = JSON.parse(s || '{}'); return d && typeof d === 'object' ? d : {}; } catch (e) { return {}; } }
+  var SOIL_FIELDS = [
+    { key: 'share', label: 'Anteil (%)', step: 5, min: 0, max: 100, mode: 'numeric', ph: 'z. B. 50' },
+    { key: 'ph', label: 'pH-Wert', step: 0.125, min: 3, max: 9, mode: 'decimal', ph: 'z. B. 6,5' },
+    { key: 'nitrogen', label: 'Stickstoff (kg/ha)', step: 5, min: 0, max: 400, mode: 'numeric', ph: 'z. B. 120' },
+  ];
+  // Eine Eingabezeile je gewählter Bodenart. Wird nur beim Wechsel von Feld oder Auswahl neu gebaut (Fokus bleibt beim Tippen).
+  function renderSoilRows() {
+    var sel = soilList(state.soil), d = soilData(state.soilData);
+    $('soil-rows').innerHTML = sel.map(function (n) {
+      var t = data.pf.soilTypes.filter(function (x) { return x.index === n; })[0];
+      if (!t) return '';
+      var v = d[n] || {};
+      return '<div class="soil-row" role="group" aria-label="Werte für ' + esc(t.name) + '"><span class="soil-name">' + esc(t.name) + '</span>' +
+        SOIL_FIELDS.map(function (f) {
+          var id = 'soil-' + n + '-' + f.key;
+          return '<div><label for="' + id + '">' + f.label + '</label><input id="' + id + '" data-soil="' + n + '" data-key="' + f.key + '" type="number" step="' + f.step + '" min="' + f.min + '" max="' + f.max + '" inputmode="' + f.mode + '" placeholder="' + f.ph + '" value="' + esc(v[f.key] === undefined ? '' : v[f.key]) + '"></div>';
+        }).join('') + '</div>';
+    }).join('');
+  }
+  // Eingaben der gewählten Bodenarten für die Rechnung.
+  function soilInputs() {
+    var d = soilData(state.soilData);
+    return soilList(state.soil).map(function (n) {
+      var v = d[n] || {};
+      return { index: n, share: num(v.share), ph: num(v.ph), nitrogen: num(v.nitrogen) };
+    });
   }
   function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   var store = Tabs.load(read(KEY), read(LEGACY_KEY));
@@ -73,7 +102,8 @@
     $('month').value = Cal.MONTH_ORDER.indexOf(state.month) >= 0 ? state.month : 'MID_AUTUMN';
     refreshCombos();
     renderSoil();
-    document.querySelector('.more').open = Boolean(state.soil || state.ph || state.nitrogen);
+    renderSoilRows();
+    document.querySelector('.more').open = Boolean(state.soil);
     renderTabs();
     render();
   }
@@ -93,7 +123,7 @@
   }
 
   // ---- Zwischenfrucht-Vergleich (Tabs je Zwischenfrucht, darunter Tabelle der Folgefrüchte)
-  var cpPct = function (r) { return r.range ? Math.round(r.range.min * 100) + '–' + Math.round(r.range.max * 100) + ' %' : pct(r.factors.total); };
+  var cpPct = function (r) { return pct(r.factors.total); };
   // Jahresangabe als kleine Marke neben dem Monat (statt Klammern im Fließtext).
   var cpYear = function (n) { return n <= 0 ? '' : ' <i class="cp-tag">' + (n === 1 ? 'nächstes Jahr' : n === 2 ? 'übernächstes Jahr' : 'in ' + n + ' Jahren') + '</i>'; };
   var cpMonth = function (period, years) { return esc(Cal.periodLabel(period)) + cpYear(years); };
@@ -158,38 +188,48 @@
     $('catch-plan').innerHTML = '<p class="cp-direct">' + direct + '</p><div class="cp-tabs" role="tablist" aria-label="Zwischenfrüchte">' + tabs + '</div>' + panel;
   }
 
+  // Hinweis unter den Bodenart-Zeilen, wenn die Anteile nicht zu 100 % passen.
+  function renderSoilSum(soils) {
+    var el = $('soil-sum'), given = soils.filter(function (s) { return s.share !== null && s.share > 0; });
+    var sum = given.reduce(function (a, s) { return a + s.share; }, 0);
+    var msg = '';
+    if (soils.length > 1 && given.length === soils.length && Math.abs(sum - 100) > 0.001) {
+      msg = 'Die Anteile ergeben ' + Math.round(sum * 10) / 10 + ' %. Die Seite rechnet sie auf 100 % um.';
+    } else if (soils.length > 1 && given.length > 0 && given.length < soils.length) {
+      msg = 'Bodenarten ohne Anteil teilen sich den Rest bis 100 %.';
+    }
+    el.textContent = msg;
+    el.hidden = !msg;
+  }
+
   // ---- Ausgabe
   function render() {
     var input = {
       last: state.last || null, prev: state.prev || null, catchCrop: state.catch || null, period: state.month,
-      soilIndexes: soilList(state.soil), nitrogen: num(state.nitrogen), ph: num(state.ph),
+      soils: soilInputs(),
     };
-    var hasSoil = input.soilIndexes.length > 0;
+    var hasSoil = input.soils.length > 0;
+    renderSoilSum(input.soils);
     var rows = Plan.buildPlan(data, input);
     renderCatchPlan(input);
     var yes = rows.filter(function (r) { return r.plantable; }).length;
     $('summary').innerHTML = '<span class="chip ok">✓ ' + yes + ' jetzt säbar</span><span class="chip no">– ' + (rows.length - yes) + ' nicht säbar</span>';
     $('rows').innerHTML = rows.map(function (r) {
       var f = r.factors, c = r.crop;
-      var multi = r.range !== null;
       var parts = ['Fruchtfolge ' + pct(f.rotation)];
-      if (multi) parts.push('Spanne aus ' + input.soilIndexes.length + ' Bodenarten');
-      else if (hasSoil) parts.push('Boden ' + pct(f.soil));
-      if (hasSoil && !multi && input.nitrogen !== null) parts.push(f.nitrogenKnown ? 'N ' + pct(f.nitrogen) : 'N: keine Daten');
-      if (hasSoil && !multi && input.ph !== null) parts.push('pH ' + pct(f.ph));
-      if (multi && input.nitrogen !== null && !f.nitrogenKnown) parts.push('N: keine Daten');
+      if (hasSoil) {
+        parts.push((input.soils.length > 1 ? 'Boden Ø ' : 'Boden ') + pct(f.soil));
+        if (input.soils.some(function (s) { return s.nitrogen !== null; })) parts.push(f.nitrogenKnown ? 'N ' + pct(f.nitrogen) : 'N: keine Daten');
+        if (input.soils.some(function (s) { return s.ph !== null; })) parts.push('pH ' + pct(f.ph));
+      }
       var lit = function (l) { return (Math.round(l / 10) * 10).toLocaleString('de-DE'); };
-      var liters = multi ? (r.range.litersMin ? '≈ ' + lit(r.range.litersMin) + '–' + lit(r.range.litersMax) + ' l/ha · ' : '')
-        : (f.litersPerHa ? '≈ ' + lit(f.litersPerHa) + ' l/ha · ' : '');
+      var liters = f.litersPerHa ? '≈ ' + lit(f.litersPerHa) + ' l/ha · ' : '';
       var status = r.plantable ? '✓ Jetzt säbar' : '– Nicht säbar im ' + Cal.periodLabel(state.month);
       var w = function (t) { return Math.max(2, Math.min(100, (t / 1.6) * 100)).toFixed(1); };
-      var low = multi ? r.range.min : f.total; // Farbstufe nach dem vorsichtigeren Wert
-      var pctText = multi ? Math.round(r.range.min * 100) + '–' + Math.round(r.range.max * 100) + ' %' : pct(f.total);
-      var bar = multi ? '<i class="max" style="width:' + w(r.range.max) + '%"></i><i style="width:' + w(r.range.min) + '%"></i>'
-        : '<i style="width:' + w(f.total) + '%"></i>';
-      return '<article class="row grid ' + (r.plantable ? 'ok' : 'no') + ' lvl-' + Plan.yieldLevel(low) + '">' +
+      var bar = '<i style="width:' + w(f.total) + '%"></i>';
+      return '<article class="row grid ' + (r.plantable ? 'ok' : 'no') + ' lvl-' + Plan.yieldLevel(f.total) + '">' +
         '<div><div class="nm">' + esc(c.label) + '</div><div class="st">' + status + ' · Saat ' + esc(r.plantingLabel) + '</div></div>' +
-        '<div><div class="pct">' + pctText + '</div><div class="bar" aria-hidden="true">' + bar + '</div>' +
+        '<div><div class="pct">' + pct(f.total) + '</div><div class="bar" aria-hidden="true">' + bar + '</div>' +
         '<div class="sub">' + liters + esc(parts.join(' · ')) + '</div></div>' +
         strip(c, state.month) + '</article>';
     }).join('');
@@ -197,7 +237,7 @@
 
   // ---- Ereignisse
   KEYS.forEach(function (k) {
-    $(k).addEventListener(k === 'ph' || k === 'nitrogen' ? 'input' : 'change', function () {
+    $(k).addEventListener('change', function () {
       var patch = {};
       patch[k] = $(k).value;
       // Nach Wahl der letzten Frucht: Monat auf deren frühesten Erntemonat setzen (danach frei änderbar).
@@ -223,9 +263,22 @@
     state = activeField();
     save();
     renderSoil();
+    renderSoilRows();
     render();
     var again = document.querySelector('.chip-soil[data-soil="' + n + '"]');
     if (again) again.focus();
+  });
+
+  // Werte je Bodenart: Eingabe speichern und neu rechnen (Zeilen bleiben stehen, damit der Fokus nicht verloren geht).
+  $('soil-rows').addEventListener('input', function (e) {
+    var t = e.target;
+    if (!t || !t.getAttribute || !t.getAttribute('data-soil')) return;
+    var d = soilData(state.soilData), n = t.getAttribute('data-soil');
+    d[n] = Object.assign({}, d[n], { [t.getAttribute('data-key')]: t.value });
+    store = Tabs.updateField(store, store.active, { soilData: JSON.stringify(d) });
+    state = activeField();
+    save();
+    render();
   });
 
   // ---- Feld-Tabs bedienen

@@ -74,37 +74,56 @@ test('yieldLevel: Stufen nach angezeigtem Prozentwert (grün ab 100, gelb ab 90,
   assert.equal(yieldLevel(0), 'bad');
 });
 
-// ---- Mehrere Bodenarten (optional): Spanne statt Einzelwert
+// ---- Mehrere Bodenarten mit eigenen Werten und Flächenanteilen
 const calcMod = require('../src/calc.js');
-const baseIn = { last: 'BARLEY', prev: 'WINTERWHEAT', catchCrop: null, period: 'EARLY_SPRING', nitrogen: 150, ph: 6.25 };
+const { soilWeights } = require('../src/plan.js');
+const baseIn = { last: 'BARLEY', prev: 'WINTERWHEAT', catchCrop: null, period: 'EARLY_SPRING' };
 const rowOf = (rows, n) => rows.find((r) => r.crop.name === n);
+const tot = (soilIndex, nitrogen, ph) => calcMod.totalFactor(data, { ...baseIn, cropName: 'WHEAT', soilIndex, nitrogen, ph }).total;
 
-test('eine Bodenart als Liste verhält sich wie bisher (keine Spanne)', () => {
-  const a = rowOf(buildPlan(data, { ...baseIn, soilIndexes: [2] }), 'WHEAT');
-  const b = rowOf(buildPlan(data, { ...baseIn, soilIndex: 2 }), 'WHEAT');
-  assert.equal(a.range, null);
+test('alte Eingabeform (soilIndexes + gemeinsames pH/N) rechnet wie soils mit einer Bodenart', () => {
+  const a = rowOf(buildPlan(data, { ...baseIn, soilIndexes: [2], nitrogen: 150, ph: 6.25 }), 'WHEAT');
+  const b = rowOf(buildPlan(data, { ...baseIn, soils: [{ index: 2, nitrogen: 150, ph: 6.25 }] }), 'WHEAT');
   assert.ok(Math.abs(a.factors.total - b.factors.total) < 1e-9);
+  assert.ok(Math.abs(a.factors.total - tot(2, 150, 6.25)) < 1e-9);
 });
 
-test('keine Bodenart: keine Spanne, nur Fruchtfolge', () => {
-  const r = rowOf(buildPlan(data, { ...baseIn, soilIndexes: [] }), 'WHEAT');
-  assert.equal(r.range, null);
+test('keine Bodenart: nur Fruchtfolge', () => {
+  const r = rowOf(buildPlan(data, { ...baseIn, soils: [] }), 'WHEAT');
   assert.ok(Math.abs(r.factors.total - r.factors.rotation) < 1e-9);
 });
 
-test('zwei Bodenarten: Spanne min/max, Gesamtwert ist der Mittelwert', () => {
-  const r = rowOf(buildPlan(data, { ...baseIn, soilIndexes: [1, 3] }), 'WHEAT');
-  const t1 = calcMod.totalFactor(data, { ...baseIn, cropName: 'WHEAT', soilIndex: 1 }).total;
-  const t3 = calcMod.totalFactor(data, { ...baseIn, cropName: 'WHEAT', soilIndex: 3 }).total;
-  assert.ok(r.range.min < r.range.max);
-  assert.ok(Math.abs(r.range.min - Math.min(t1, t3)) < 1e-9);
-  assert.ok(Math.abs(r.range.max - Math.max(t1, t3)) < 1e-9);
-  assert.ok(Math.abs(r.factors.total - (t1 + t3) / 2) < 1e-9);
-  assert.ok(r.range.litersMin < r.range.litersMax);
+test('zwei Bodenarten: jede mit eigenem pH/N, Gesamtwert nach Flächenanteil gewichtet', () => {
+  const r = rowOf(buildPlan(data, { ...baseIn, soils: [
+    { index: 1, share: 70, ph: 6.0, nitrogen: 100 },
+    { index: 3, share: 30, ph: 7.0, nitrogen: 200 },
+  ] }), 'WHEAT');
+  const t1 = tot(1, 100, 6.0), t3 = tot(3, 200, 7.0);
+  assert.ok(Math.abs(t1 - t3) > 1e-6);
+  assert.ok(Math.abs(r.factors.total - (0.7 * t1 + 0.3 * t3)) < 1e-9);
+  assert.equal(r.perSoil.length, 2);
+  assert.equal(r.range, undefined);
 });
 
-test('Sortierung nach Mittelwert, säbare zuerst, auch bei Spanne', () => {
-  const rows = buildPlan(data, { ...baseIn, period: 'MID_AUTUMN', soilIndexes: [1, 3] });
+test('Anteile ohne Angabe: gleich gewichtet; leeres pH/N wird für die Bodenart nicht mitgerechnet', () => {
+  const r = rowOf(buildPlan(data, { ...baseIn, soils: [
+    { index: 1, share: null, ph: null, nitrogen: null },
+    { index: 3, share: null, ph: 7.0, nitrogen: null },
+  ] }), 'WHEAT');
+  assert.ok(Math.abs(r.factors.total - (tot(1, null, null) + tot(3, null, 7.0)) / 2) < 1e-9);
+});
+
+test('soilWeights: Normierung, Rest auf fehlende Anteile, alles leer = gleich', () => {
+  const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, a + ' vs ' + b);
+  near(soilWeights([{ share: 50 }, { share: 50 }])[0], 0.5);
+  near(soilWeights([{ share: 30 }, { share: 30 }])[0], 0.5); // Summe 60 -> proportional
+  const m = soilWeights([{ share: 40 }, { share: null }, { share: null }]); // Rest 60 geteilt
+  near(m[0], 0.4); near(m[1], 0.3); near(m[2], 0.3);
+  near(soilWeights([{ share: null }, { share: 0 }])[0], 0.5);
+});
+
+test('Sortierung nach gewichtetem Wert, säbare zuerst, auch bei mehreren Bodenarten', () => {
+  const rows = buildPlan(data, { ...baseIn, period: 'MID_AUTUMN', soils: [{ index: 1, share: 50 }, { index: 3, share: 50 }] });
   const firstNo = rows.findIndex((r) => !r.plantable);
   const yes = firstNo < 0 ? rows : rows.slice(0, firstNo);
   for (let i = 1; i < yes.length; i++) assert.ok(yes[i - 1].factors.total >= yes[i].factors.total);
