@@ -2485,6 +2485,8 @@
    }
   ],
   "nitrogenRegularLevel": 170,
+  "catchCropNitrogen": 25,
+  "choppedStrawNitrogen": 25,
   "nitrogenRequirements": {
    "WHEAT": [
     {

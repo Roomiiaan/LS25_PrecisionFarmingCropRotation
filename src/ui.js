@@ -103,6 +103,7 @@
     refreshCombos();
     renderSoil();
     renderSoilRows();
+    $('catch-worked').checked = state.catchWorked === '1';
     document.querySelector('.more').open = Boolean(state.soil);
     renderTabs();
     render();
@@ -180,6 +181,7 @@
     else if (c.verdict === 'better') verdict = '✓ Bester Wert: ' + esc(c.best.row.crop.label) + ' ' + cpPct(c.best.row) + (out.direct ? ' statt ' + cpPct(out.direct) + ' direkt' : '') + ', ' + esc(Cal.formatWait(c.best.delayMonths));
     else verdict = '– Lohnt sich nicht: direkt säen bringt ' + cpPct(out.direct) + ' (' + esc(out.direct.crop.label) + '), mit Zwischenfrucht höchstens ' + cpPct(c.best.row) + ' (' + esc(c.best.row.crop.label) + ')';
     var panel = '<div class="cp-panel" id="cp-panel" role="tabpanel" aria-labelledby="cp-tab-' + esc(c.catchCrop.name) + '">' +
+      '<div class="cp-n">Untergearbeitet (Grubber/Pflug) bringt sie +' + (data.pf.catchCropNitrogen || 0) + ' kg/ha Stickstoff' + (state.catchWorked === '1' ? ', im Ertrag eingerechnet.' : '. Haken oben setzen, dann wird es mitgerechnet.') + '</div>' +
       '<div class="cp-ready"><span class="cp-step"><small>Saat</small><span>' + esc(Cal.periodLabel(c.sowPeriod)) + '</span></span><span class="cp-arrow" aria-hidden="true">→</span><span class="cp-step"><small>Gewachsen nach ' + c.readyAfter + ' Monaten</small><span>' + cpMonth(c.readyPeriod, c.readyYearsAhead) + '</span></span></div>' +
       (top.length ? cpTable(top) : '') +
       (rest.length ? '<details class="cp-more"><summary>weitere ' + rest.length + '</summary>' + cpTable(rest) + '</details>' : '') +
@@ -202,10 +204,28 @@
     el.hidden = !msg;
   }
 
+  // Stickstoff-Zeile je Frucht: Zielwert, mit eingetragenem N-Wert die Düngeempfehlung bzw. Überschuss.
+  var soilName = function (n) { var t = data.pf.soilTypes.filter(function (x) { return x.index === n; })[0]; return t ? t.name : ''; };
+  function nitrogenLine(r, multi) {
+    var items = r.perSoil.filter(function (p) { return p.target; });
+    if (!items.length) return '';
+    var out = items.map(function (p) {
+      var pre = multi ? esc(soilName(p.soilIndex)) + ': ' : '';
+      if (p.target.target === 0) return pre + 'braucht keinen Dünger';
+      var a = p.advice;
+      if (!a) return pre + 'Ziel-N <b>' + p.target.target + '</b> kg/ha';
+      var base = 'Ziel <b>' + a.target + '</b>, jetzt ' + a.nitrogen + (a.bonus ? ' (inkl. +' + a.bonus + ' Zwischenfrucht)' : '');
+      if (a.need > 0) return pre + base + ' → <span class="need">düngen ' + a.need + ' kg/ha</span>';
+      if (a.need === 0) return pre + base + ' → passt';
+      return pre + base + (a.ignoreOver ? ' → über Ziel, schadet dieser Frucht nicht' : ' → <span class="over">' + (-a.need) + ' kg/ha zu viel</span>');
+    });
+    return '<div class="nline">' + out.join('<br>') + '</div>';
+  }
+
   // ---- Ausgabe
   function render() {
     var input = {
-      last: state.last || null, prev: state.prev || null, catchCrop: state.catch || null, period: state.month,
+      last: state.last || null, prev: state.prev || null, catchCrop: state.catch || null, catchWorked: state.catchWorked === '1', period: state.month,
       soils: soilInputs(),
     };
     var hasSoil = input.soils.length > 0;
@@ -230,7 +250,7 @@
       return '<article class="row grid ' + (r.plantable ? 'ok' : 'no') + ' lvl-' + Plan.yieldLevel(f.total) + '">' +
         '<div><div class="nm">' + esc(c.label) + '</div><div class="st">' + status + ' · Saat ' + esc(r.plantingLabel) + '</div></div>' +
         '<div><div class="pct">' + pct(f.total) + '</div><div class="bar" aria-hidden="true">' + bar + '</div>' +
-        '<div class="sub">' + liters + esc(parts.join(' · ')) + '</div></div>' +
+        '<div class="sub">' + liters + esc(parts.join(' · ')) + '</div>' + nitrogenLine(r, input.soils.length > 1) + '</div>' +
         strip(c, state.month) + '</article>';
     }).join('');
   }
@@ -250,6 +270,13 @@
       save();
       render();
     });
+  });
+
+  $('catch-worked').addEventListener('change', function () {
+    store = Tabs.updateField(store, store.active, { catchWorked: $('catch-worked').checked ? '1' : '' });
+    state = activeField();
+    save();
+    render();
   });
 
   // Bodenart-Schalter: einzeln an/aus, Mehrfachauswahl erlaubt.

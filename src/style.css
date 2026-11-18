@@ -30,6 +30,13 @@ select,input{width:100%;min-height:44px;border:1px solid var(--line);border-radi
 .soil-row{display:grid;grid-template-columns:minmax(110px,1fr) repeat(3,minmax(90px,1fr));gap:10px;align-items:end;padding:10px 12px;border:1px solid var(--line);border-left:4px solid var(--pri);border-radius:10px;background:var(--card)}
 .soil-name{font-weight:700;align-self:center}
 .soil-sum{color:var(--pri)}
+.check{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:14px;cursor:pointer;min-height:32px}
+.check input{width:20px;min-height:20px;height:20px;flex:none}
+.nline{font-size:13px;margin-top:3px;color:var(--mut)}
+.nline b{color:var(--ink)}
+.nline .over{color:var(--lv-bad,#c0392b);font-weight:600}
+.cp-n{font-size:13px;color:var(--mut);margin-bottom:8px}
+.nline .need{color:var(--pri);font-weight:600}
 .chip-soil{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;cursor:pointer}
 .chip-soil:hover{border-color:var(--pri)}
 .chip-soil[aria-pressed="true"]{background:var(--priS);border-color:var(--pri);color:var(--ink);font-weight:700}

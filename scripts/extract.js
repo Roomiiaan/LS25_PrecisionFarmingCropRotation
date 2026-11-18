@@ -176,6 +176,8 @@ function main() {
     difference: Number(m.difference), yieldFactor: Number(m.yieldFactor),
   }));
   const nitrogenRegularLevel = Number(attrs(nBlock.match(/<yieldMappings\b([^>]*)>/)[1]).regularLevel);
+  const catchCropNitrogen = Number(attrs(nBlock.match(/<catchCrops\b([^>]*?)\/>/)[1]).increase);
+  const choppedStrawNitrogen = Number(attrs(nBlock.match(/<choppedStraw\b([^>]*?)\/>/)[1]).increase);
   const nitrogenRequirements = {};
   const nitrogenIgnoreOverfertilization = [];
   for (const m of nBlock.matchAll(/<fruitRequirement\b([^>]*)>([\s\S]*?)<\/fruitRequirement>/g)) {
@@ -215,7 +217,7 @@ function main() {
       },
     },
     settings, crops, catchCrops,
-    pf: { soilTypes, nitrogenYieldMappings, nitrogenRegularLevel, nitrogenRequirements, nitrogenIgnoreOverfertilization, phMappings, phOptimal, phValuePerState },
+    pf: { soilTypes, nitrogenYieldMappings, nitrogenRegularLevel, catchCropNitrogen, choppedStrawNitrogen, nitrogenRequirements, nitrogenIgnoreOverfertilization, phMappings, phOptimal, phValuePerState },
   };
   fs.mkdirSync(path.dirname(OUT), { recursive: true });
   fs.writeFileSync(OUT, JSON.stringify(data, null, 1));

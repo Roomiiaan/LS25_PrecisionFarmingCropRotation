@@ -160,3 +160,34 @@ test('formatWait: Wartezeit in Monaten und Jahren', () => {
   assert.equal(cal.formatWait(24), 'in 2 Jahren');
   assert.equal(cal.formatWait(26), 'in 2 Jahren 2 Monaten');
 });
+
+// ---- Stickstoff-Ziel und Zwischenfrucht-Bonus
+test('nitrogenTarget: Weizen auf Sandigem Lehm will 180, Sorten ohne PF-Werte nutzen die Art, Ölrettich braucht 0', () => {
+  assert.equal(calcMod.nitrogenTarget(data, { cropName: 'WHEAT', soilIndex: 2 }).target, 180);
+  assert.equal(calcMod.nitrogenTarget(data, { cropName: 'WINTERWHEAT', soilIndex: 3 }).target, 200);
+  assert.equal(calcMod.nitrogenTarget(data, { cropName: 'OILSEEDRADISH', soilIndex: 2 }).target, 0);
+  assert.equal(calcMod.nitrogenTarget(data, { cropName: 'WHEAT', soilIndex: null }), null);
+  assert.equal(calcMod.nitrogenTarget(data, { cropName: 'SPELT', soilIndex: 2 }), null);
+  assert.equal(calcMod.nitrogenTarget(data, { cropName: 'POTATO', soilIndex: 2 }).ignoreOver, true);
+});
+
+test('Zwischenfrucht untergearbeitet: +25 N werden zum eingegebenen Wert gerechnet und von der Düngung abgezogen', () => {
+  const soils = [{ index: 2, nitrogen: 150 }];
+  const adv = (extra) => rowOf(buildPlan(data, { ...baseIn, ...extra, soils }), 'WHEAT').perSoil[0].advice;
+  assert.equal(adv({ catchCrop: 'OILSEEDRADISH', catchWorked: false }).need, 30);   // 180 - 150
+  const w = adv({ catchCrop: 'OILSEEDRADISH', catchWorked: true });
+  assert.equal(w.need, 5);                                                            // 180 - 175
+  assert.equal(w.nitrogen, 175);
+  assert.equal(w.bonus, 25);
+  assert.equal(adv({ catchCrop: null, catchWorked: true }).need, 30);                 // ohne Zwischenfrucht kein Bonus
+  assert.equal(rowOf(buildPlan(data, { ...baseIn, soils: [{ index: 2 }] }), 'WHEAT').perSoil[0].advice, null); // ohne N-Wert keine Empfehlung
+});
+
+test('Überdüngung: need ist negativ, Ertragsfaktor nutzt den Wert inklusive Bonus', () => {
+  const soils = [{ index: 2, nitrogen: 170 }];
+  const without = rowOf(buildPlan(data, { ...baseIn, catchCrop: 'OILSEEDRADISH', catchWorked: false, soils }), 'WHEAT');
+  const withB = rowOf(buildPlan(data, { ...baseIn, catchCrop: 'OILSEEDRADISH', catchWorked: true, soils }), 'WHEAT');
+  assert.equal(withB.perSoil[0].advice.need, -15);
+  assert.ok(withB.factors.nitrogen < 1 && without.factors.nitrogen < 1);
+  assert.ok(Math.abs(withB.factors.nitrogen - calcMod.nitrogenFactor(data, { cropName: 'WHEAT', soilIndex: 2, nitrogen: 195 })) < 1e-9);
+});

@@ -80,6 +80,16 @@
     return s ? s.yieldPotential : 1.0;
   }
 
+  // Zielwert und Entzug der Frucht auf dieser Bodenart (kg/ha) oder null, wenn die Mod dafür nichts kennt.
+  // ignoreOverfertilization: Mehr Stickstoff als das Ziel schadet dieser Frucht nicht.
+  function nitrogenTarget(data, { cropName, soilIndex }) {
+    if (!has(soilIndex)) return null;
+    const key = NITROGEN_ALIAS[cropName] || cropName;
+    const req = (data.pf.nitrogenRequirements[key] || []).find((r) => r.soil === soilIndex);
+    if (!req) return null;
+    return { target: req.targetLevel, removal: req.reduction, ignoreOver: data.pf.nitrogenIgnoreOverfertilization.includes(key) };
+  }
+
   // nitrogen in kg/ha. Unbekannte Frucht/Boden oder fehlende Eingabe => 1,0.
   function nitrogenFactor(data, { cropName, soilIndex, nitrogen }) {
     if (!has(soilIndex) || !has(nitrogen)) return 1.0;
@@ -111,7 +121,7 @@
     return { rotation, soil, nitrogen, ph, total, litersPerHa, nitrogenKnown };
   }
 
-  const api = { FALLOW, rotationFactor, soilFactor, nitrogenFactor, phFactor, totalFactor };
+  const api = { FALLOW, rotationFactor, soilFactor, nitrogenTarget, nitrogenFactor, phFactor, totalFactor };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Calc = api;
 })(typeof window !== 'undefined' ? window : globalThis);

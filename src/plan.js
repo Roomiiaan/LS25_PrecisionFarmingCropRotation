@@ -33,7 +33,7 @@
     return idx.map((index) => ({ index, share: null, ph: input.ph, nitrogen: input.nitrogen }));
   }
 
-  // input: { last, prev, catchCrop, period, soils }
+  // input: { last, prev, catchCrop, catchWorked, period, soils }
   // 0 Bodenarten = nur Fruchtfolge; sonst wird der Ertrag je Bodenart mit deren pH/N gerechnet
   // und nach Flächenanteil zum Gesamtwert gewichtet.
   function buildPlan(data, input) {
@@ -42,14 +42,23 @@
     const rows = data.crops
       .filter((c) => c.onMap && !c.ignoreInPlanner)
       .map((crop) => {
-        const perSoil = (soils.length ? soils : [{ index: null }]).map((s, i) => ({
-          soilIndex: s.index,
-          weight: weights[i],
-          factors: Calc.totalFactor(data, {
-            cropName: crop.name, last: input.last, prev: input.prev, catchCrop: input.catchCrop,
-            soilIndex: s.index, nitrogen: isNum(s.nitrogen) ? s.nitrogen : null, ph: isNum(s.ph) ? s.ph : null,
-          }),
-        }));
+        const perSoil = (soils.length ? soils : [{ index: null }]).map((s, i) => {
+          // Stickstoff zum Zeitpunkt der Saat: eingegebener Wert, plus Bonus der untergearbeiteten Zwischenfrucht.
+          const bonus = input.catchWorked && input.catchCrop ? data.pf.catchCropNitrogen || 0 : 0;
+          const nitrogen = isNum(s.nitrogen) ? s.nitrogen + bonus : null;
+          const tgt = Calc.nitrogenTarget(data, { cropName: crop.name, soilIndex: s.index });
+          return {
+            soilIndex: s.index,
+            weight: weights[i],
+            // need > 0: so viel kg/ha müsste noch gedüngt werden; need < 0: so viel liegt über dem Ziel.
+            advice: tgt && nitrogen !== null ? Object.assign({ nitrogen, bonus }, tgt, { need: tgt.target - nitrogen }) : null,
+            target: tgt,
+            factors: Calc.totalFactor(data, {
+              cropName: crop.name, last: input.last, prev: input.prev, catchCrop: input.catchCrop,
+              soilIndex: s.index, nitrogen, ph: isNum(s.ph) ? s.ph : null,
+            }),
+          };
+        });
         const wmean = (key) => perSoil.reduce((a, p) => a + p.weight * p.factors[key], 0);
         let factors = perSoil[0].factors;
         if (perSoil.length > 1) {
